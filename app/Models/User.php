@@ -52,7 +52,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function modele()
+    public function model()
     {
         return $this->hasOne(Modele::class);
     }

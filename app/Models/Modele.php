@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Modele extends Model
 {
     use HasFactory;
-
-    protected $guarded = [];
     
     protected $fillable = [
         'user_id',
@@ -23,7 +21,7 @@ class Modele extends Model
         'twitter',
         'youtube',
         'verified',
-    ],
+    ];
     
     public function user()
     {
