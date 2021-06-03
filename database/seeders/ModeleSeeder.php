@@ -13,6 +13,19 @@ class ModeleSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \DB::table('modeles')->insert([
+            'user_id'    => '3',
+            'stage_name' => 'Jey13',
+            'has'        => 3,
+            'bio'        => 'cool',
+            'facebook'   => 'jey13',
+            'instagram'  => 'jey13',
+            'twitter'    => 'jey13',
+            'youtube'    => 'jey13',
+            'verified'   => true,
+            
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 }

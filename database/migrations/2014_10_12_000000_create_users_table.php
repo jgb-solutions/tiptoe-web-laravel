@@ -19,15 +19,15 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('password_reset_code');
+            $table->string('password_reset_code')->nullable();
             $table->boolean('active')->default(false);
             $table->boolean('admin')->default(false);
             $table->boolean('first_login')->default(true);
-            $table->text('avatar');
+            $table->text('avatar')->nullable();
             $table->string('gender');
             $table->string('telephone');
             $table->string('user_type');
-            $table->text('image_bucket');
+            $table->text('image_bucket')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
