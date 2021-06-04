@@ -38,6 +38,11 @@ type Mutation {
     addPhoto(input: PhotoInput! @spread): Photo @create
     updatePhoto(id: ID!, input: PhotoInput @spread): Photo @update
     deletePhoto(id: ID!): Photo @delete
+
+    ##favorite
+    addFavorite(input: FavoriteInput! @spread): Favorite @create
+    updateFavorite(id: ID!, input: FavoriteInput @spread): Favorite @update
+    deleteFavorite(id: ID!): Favorite @delete
 }
 
 
@@ -46,7 +51,8 @@ type User {
     name: String!
     email: String!
     modele: Modele @hasOne
-    modeles: [Modele!]! @hasMany
+    modeles: [Modele!]! @belongsToMany
+    favorites: [Photo!]! @belongsToMany
 
     created_at: DateTime!
     updated_at: DateTime!
@@ -65,7 +71,7 @@ type Modele {
     youtube: String
     verified: Boolean
     user: User @belongsTo
-    followers: [User!]! @hasMany
+    followers: [User!]! @belongsToMany
     photos: [Photo!]! @hasMany
 
     created_at: DateTime!
@@ -95,11 +101,25 @@ type Photo {
     publish: Boolean
     category: Category! @belongsTo
     modele: Modele! @belongsTo
+    users: [User!]! @belongsToMany
 
     created_at: DateTime!
     updated_at: DateTime!
 }
 
+type Favorite {
+    id: ID!
+    user_id: Int!
+    photo_id: Int!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+
+
+
+##input
 input CategoryInput {
     name: String!
     slug: String
@@ -115,4 +135,9 @@ input PhotoInput {
     featured: Boolean
     has: Int!
     publish: Boolean
+}
+
+input FavoriteInput {
+    photo_id: Int!
+    user_id: Int!
 }
