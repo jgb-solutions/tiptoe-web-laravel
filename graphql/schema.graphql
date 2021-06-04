@@ -32,10 +32,12 @@ type Mutation {
     ##category
     createCategory(input: CategoryInput! @spread): Category @create
     updateCategory(id: ID!, input: CategoryInput @spread): Category @update
+    deleteCategory(id: ID!): Category @delete
 
     ##photo
     addPhoto(input: PhotoInput! @spread): Photo @create
     updatePhoto(id: ID!, input: PhotoInput @spread): Photo @update
+    deletePhoto(id: ID!): Photo @delete
 }
 
 
