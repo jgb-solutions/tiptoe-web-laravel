@@ -90,5 +90,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Modele::class, Follower::class, 'user_id', 'modele_id');
     }
-    
+
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Photo::class, Favorite::class, 'user_id', 'photo_id');
+    }
 }

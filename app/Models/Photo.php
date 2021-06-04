@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Photo extends Model
 {
@@ -30,5 +31,10 @@ class Photo extends Model
     public function modele(): BelongsTo
     {
         return $this->belongsTo(Modele::class);
+    }
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, Favorite::class, 'photo_id', 'user_id');
     }
 }
