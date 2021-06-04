@@ -47,6 +47,17 @@ enum RegisterStatuses {
     SUCCESS
 }
 
+enum UserType {
+	MODEL
+	CONSUMER
+}
+
+enum Genre {
+	MALE
+	FEMALE
+    OTHER
+}
+
 input ForgotPasswordInput {
     email: String! @rules(apply: ["required", "email"])
 }
@@ -63,8 +74,8 @@ input RegisterInput {
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
     password: String! @rules(apply: ["required", "confirmed", "min:8"])
     password_confirmation: String!
-    gender: String! @rules(apply: ["required", "string"])
-    user_type: String! @rules(apply: ["required", "string"])
+    gender: Genre @rules(apply: ["required"])
+    user_type: UserType @rules(apply: ["required"])
     telephone: String! @rules(apply: ["required", "string"])
     modele: CreateModeleInput! 
 }
