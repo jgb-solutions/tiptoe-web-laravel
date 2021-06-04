@@ -30,10 +30,12 @@ type Mutation {
     updatePassword(input: UpdatePassword! @spread): UpdatePasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\UpdatePassword@resolve") @guard(with: ["api"])
 
     ##category
-    createCategory(input: CreateCategoryInput! @spread): Category @create
+    createCategory(input: CategoryInput! @spread): Category @create
+    updateCategory(id: ID!, input: CategoryInput @spread): Category @update
 
     ##photo
-    addPhoto(input: AddPhotoInput! @spread): Photo @create
+    addPhoto(input: PhotoInput! @spread): Photo @create
+    updatePhoto(id: ID!, input: PhotoInput @spread): Photo @update
 }
 
 
@@ -96,12 +98,12 @@ type Photo {
     updated_at: DateTime!
 }
 
-input CreateCategoryInput {
+input CategoryInput {
     name: String!
     slug: String
 }
 
-input AddPhotoInput {
+input PhotoInput {
     modele_id: Int!
     category_id: Int!
     uri: String!
