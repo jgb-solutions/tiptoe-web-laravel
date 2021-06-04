@@ -31,6 +31,9 @@ type Mutation {
 
     ##category
     createCategory(input: CreateCategoryInput! @spread): Category @create
+
+    ##photo
+    addPhoto(input: AddPhotoInput! @spread): Photo @create
 }
 
 
@@ -96,4 +99,16 @@ type Photo {
 input CreateCategoryInput {
     name: String!
     slug: String
+}
+
+input AddPhotoInput {
+    modele_id: Int!
+    category_id: Int!
+    uri: String!
+    image_bucket: String!
+    caption: String!
+    detail: String!
+    featured: Boolean
+    has: Int!
+    publish: Boolean
 }
