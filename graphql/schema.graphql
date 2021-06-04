@@ -29,6 +29,7 @@ type User {
     name: String!
     email: String!
     modele: Modele @hasOne
+    modeles: [Modele!]! @hasMany
 
     created_at: DateTime!
     updated_at: DateTime!
@@ -47,6 +48,7 @@ type Modele {
     youtube: String
     verified: Boolean
     user: User @belongsTo
+    followers: [User!]! @hasMany
 
     created_at: DateTime!
     updated_at: DateTime!
