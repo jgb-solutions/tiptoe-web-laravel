@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 
 class User extends Authenticatable
@@ -54,7 +56,31 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function model()
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::creating(function ($data) {
+            
+        });
+
+        self::created(function ($user) {
+            if (request()->has('model')) {
+
+                \Log::error('cool', ['error' => request()->model] );
+                Modele::create([
+                    'user_id'=> $user->id,
+                   request()->model]
+                );
+            }
+        });
+
+        self::updating(function(){
+            
+        });
+    }
+
+    public function modele(): HasOne
     {
         return $this->hasOne(Modele::class);
     }

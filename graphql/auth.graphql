@@ -63,6 +63,22 @@ input RegisterInput {
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
     password: String! @rules(apply: ["required", "confirmed", "min:8"])
     password_confirmation: String!
+    gender: String! @rules(apply: ["required", "string"])
+    user_type: String! @rules(apply: ["required", "string"])
+    telephone: String! @rules(apply: ["required", "string"])
+    modele: CreateModeleInput! 
+}
+
+input CreateModeleInput {
+    stage_name: String! 
+    image_bucket: String 
+    poster: String 
+    has: Int 
+    bio: String 
+    facebook: String 
+    instagram: String 
+    twitter: String 
+    youtube: String 
 }
 
 input SocialLoginInput {
