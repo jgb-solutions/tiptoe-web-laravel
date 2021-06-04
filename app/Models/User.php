@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 
@@ -84,4 +85,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Modele::class);
     }
+
+    public function modeles(): BelongsToMany
+    {
+        return $this->belongsToMany(Modele::class, Follower::class, 'user_id', 'modele_id');
+    }
+    
 }
