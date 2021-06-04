@@ -9,6 +9,12 @@ type Query {
 
     modeles: [Modele!]! @paginate(type: "paginator" model: "App\\Models\\Modele")
     modele(id: ID @eq): Modele @find(model: "App\\Models\\Modele")
+
+    categories: [Category!]! @paginate(type: "paginator" model: "App\\Models\\Category")
+    category(id: ID @eq): Category @find(model: "App\\Models\\Category")
+
+    photos: [Photo!]! @paginate(type: "paginator" model: "App\\Models\\Photo")
+    photo(id: ID @eq): Photo @find(model: "App\\Models\\Photo")
 }
 
 type Mutation {
@@ -49,6 +55,35 @@ type Modele {
     verified: Boolean
     user: User @belongsTo
     followers: [User!]! @hasMany
+    photos: [Photo!]! @hasMany
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Category {
+    id: ID!
+    name: String!
+    slug: String!
+    photos: [Photo!]! @hasMany
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Photo {
+    id: ID!
+    modele_id: Int!
+    category_id: Int!
+    uri: String!
+    image_bucket: String!
+    caption: String!
+    detail: String
+    featured: Boolean
+    has: Int
+    publish: Boolean
+    category: Category! @belongsTo
+    modele: Modele! @belongsTo
 
     created_at: DateTime!
     updated_at: DateTime!
