@@ -96,7 +96,7 @@
                 </nav>
             </header>
 
-            <div class="my-0 px-8 py-5"> 
+            <div class="-mt-14 px-8 py-5"> 
             <h4 class="font-bold mt-12 pb-2 text-gray"> Tiptoe App</h4>
 
                 <div class="grid lg:grid-cols-4 gap-10">
@@ -188,7 +188,7 @@
             </div>
             
                 <div class="px-8">
-                    <img src="./covidimage.jpg" alt="" class="w-full h-32 sm:h-56 rounded-md  " />
+                    <img src="./covidimage.jpg" alt="" class="w-full h-32 md:h-80 rounded-md  " />
                 </div>
 
                 <div class="flex justify-center">
