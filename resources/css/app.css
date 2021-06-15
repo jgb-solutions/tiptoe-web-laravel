@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.link {
+    @apply list-none py-2 text-nightshadz;
+}
+
+.icon {
+    @apply w-6 inline-block mr-1;
+}
+
+.cart {
+    @apply px-2 bg-white rounded-lg overflow-hidden shadow-md relative hover:shadow-lg;
+}
+
+.title {
+    @apply text-black text-sm opacity-60;
+}
+
+.headericon {
+    @apply w-1/3 h-4 py-4 sm:h-16 object-cover text-antiqueBrass;
+}
+
+.icons {
+    @apply w-5 inline-block  opacity-60;
+}
