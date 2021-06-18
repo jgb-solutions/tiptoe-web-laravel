@@ -57,6 +57,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $with = [
+      'favorites'
+    ];
+
     protected static function boot()
     {
         parent::boot();

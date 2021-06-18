@@ -16,7 +16,7 @@ class ModeleSeeder extends Seeder
         \DB::table('modeles')->insert([
             'user_id'    => '3',
             'stage_name' => 'Jey13',
-            'has'        => 3,
+            'hash'        => 3,
             'bio'        => 'cool',
             'facebook'   => 'jey13',
             'instagram'  => 'jey13',

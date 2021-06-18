@@ -22,7 +22,7 @@ class CreatePhotosTable extends Migration
             $table->string('caption');
             $table->text('detail')->nullable();
             $table->boolean('featured')->nullable();
-            $table->integer('has');
+            $table->integer('hash');
             $table->boolean('publish')->default(false);
             $table->timestamps();
 

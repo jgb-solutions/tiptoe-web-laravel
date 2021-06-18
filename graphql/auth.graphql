@@ -77,7 +77,7 @@ input RegisterInput {
     gender: Genre @rules(apply: ["required"])
     user_type: UserType @rules(apply: ["required"])
     telephone: String! @rules(apply: ["required", "string"])
-    modele: CreateModeleInput! 
+    modele: ModeleHasOne! 
 }
 
 input CreateModeleInput {
