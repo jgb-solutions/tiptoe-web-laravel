@@ -17,7 +17,7 @@ class Photo extends Model
         'modele_id',
         'category_id',
         'uri',
-        'image_bucket',
+        'bucket',
         'caption',
         'detail',
         'featured',
@@ -46,7 +46,7 @@ class Photo extends Model
 
         self::creating(function ($input) {
             $input['hash'] = Str::uuid();
-            $input['uri'] = $input['image_bucket'];
+            $input['uri'] = $input['bucket'];
         });
 
         self::created(function ($event) {

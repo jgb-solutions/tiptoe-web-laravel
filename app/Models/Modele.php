@@ -17,7 +17,7 @@ class Modele extends Model
     protected $fillable = [
         'user_id',
         'stage_name',
-        'image_bucket',
+        'bucket',
         'poster',
         'has',
         'bio',

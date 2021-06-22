@@ -33,7 +33,7 @@ class User extends Authenticatable
         'gender',
         'telephone',
         'user_type',
-        'image_bucket',
+        'bucket',
         'telephone',
     ];
 

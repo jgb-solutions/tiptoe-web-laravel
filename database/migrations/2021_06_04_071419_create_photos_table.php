@@ -18,7 +18,8 @@ class CreatePhotosTable extends Migration
             $table->bigInteger('modele_id');
             $table->bigInteger('category_id');
             $table->string('uri');
-            $table->string('image_bucket');
+            $table->string('bucket');
+            $table->string('type');
             $table->string('caption');
             $table->text('detail')->nullable();
             $table->boolean('featured')->nullable();

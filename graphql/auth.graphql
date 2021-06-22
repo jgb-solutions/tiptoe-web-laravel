@@ -82,7 +82,7 @@ input RegisterInput {
 
 input CreateModeleInput {
     stage_name: String! 
-    image_bucket: String 
+    bucket: String 
     poster: String 
     has: Int 
     bio: String 
