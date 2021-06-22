@@ -3,15 +3,33 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
+# type Query @guard(with: ["api"]) {
 type Query {
     users: [User!]! @paginate(type: "paginator" model: "App\\Models\\User")
     user(id: ID @eq): User @find(model: "App\\Models\\User")
+    me: User! @auth
 
-    modeles: [Modele!]! @paginate(type: "paginator" model: "App\\Models\\Modele")
+    modeles(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Modele!]! @paginate(defaultCount: 20,  model: "App\\Models\\Modele")
     modele(id: ID @eq): Modele @find(model: "App\\Models\\Modele")
+
+    categories: [Category!]! @all(model: "App\\Models\\Category")
+    category(id: ID @eq): Category @find(model: "App\\Models\\Category")
+
+    # photos: [Photo!]! @paginate(type: "paginator" model: "App\\Models\\Photo")
+    photo(id: ID @eq): Photo @find(model: "App\\Models\\Photo")
+
+    photos(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Photo!]! @paginate(defaultCount: 20,  model: "App\\Models\\Photo")
+
+    # favoritePhoto(user_id: Int @eq, page: Int = 1, first: Int = 10, orderBy: [OrderByClause!] @orderBy): [Photo!]!
+    favoritePhoto(user_id: Int @eq, page: Int = 1, first: Int = 10, orderBy: [OrderByClause!] @orderBy): [Photo!]! 
+ 
 }
 
+
+
+
 type Mutation {
+    ##auth
     login(input: LoginInput @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
     refreshToken(input: RefreshTokenInput @spread): RefreshTokenPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\RefreshToken@resolve")
     logout: LogoutResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Logout@resolve")
@@ -21,6 +39,29 @@ type Mutation {
     socialLogin(input: SocialLoginInput! @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\SocialLogin@resolve")
     verifyEmail(input: VerifyEmailInput! @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\VerifyEmail@resolve")
     updatePassword(input: UpdatePassword! @spread): UpdatePasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\UpdatePassword@resolve") @guard(with: ["api"])
+
+    ##user
+    updateUser(input: UpdateUserInput! @spread): User @update
+
+    ##category
+    createCategory(input: CategoryInput! @spread): Category @create
+    updateCategory(id: ID!, input: CategoryInput @spread): Category @update
+    deleteCategory(id: ID!): Category @delete
+
+    ##photo
+    addPhoto(input: PhotoInput! @spread): Photo @create
+    updatePhoto(id: ID!, input: PhotoInput @spread): Photo @update
+    deletePhoto(id: ID!): Photo @delete
+
+    ##favorite
+    addFavorite(input: FavoriteInput! @spread): Favorite @create
+    updateFavorite(id: ID!, input: FavoriteInput @spread): Favorite @update
+    deleteFavorite(id: ID!): Favorite @delete
+
+    ##follower
+    addFollower(input: FollowerInput! @spread): Follower @create
+    updateFollower(id: ID!, input: FollowerInput @spread): Follower @update
+    deleteFollower(id: ID!): Follower @delete
 }
 
 
@@ -28,7 +69,16 @@ type User {
     id: ID!
     name: String!
     email: String!
+    active: Boolean!
+    admin: Boolean!
+    first_login: Boolean!
+    user_type: String!
+    avatar: String
+    telephone: String!
+    gender: String!
     modele: Modele @hasOne
+    modeles: [Modele!]! @belongsToMany
+    favorites: [Photo!]! @belongsToMany
 
     created_at: DateTime!
     updated_at: DateTime!
@@ -37,9 +87,9 @@ type User {
 type Modele {
     id: ID!
     stage_name: String!
-    image_bucket: String
+    bucket: String
     poster: String
-    has: Int
+    hash: String
     bio: String
     facebook: String
     instagram: String
@@ -47,7 +97,160 @@ type Modele {
     youtube: String
     verified: Boolean
     user: User @belongsTo
+    followers: [User!]! @belongsToMany
+    photos: [Photo!]! @hasMany
 
     created_at: DateTime!
     updated_at: DateTime!
+}
+
+type Category {
+    id: ID!
+    name: String!
+    slug: String!
+    photos: [Photo!]! @hasMany
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Photo {
+    id: ID!
+    modele_id: Int!
+    category_id: Int!
+    uri: String!
+    bucket: String!
+    caption: String!
+    detail: String
+    featured: Boolean
+    hash: String
+    type: String
+    publish: Boolean
+    liked_by_me: Boolean
+    likes_count: Int
+    category: Category! @belongsTo
+    modele: Modele! @belongsTo
+    users: [User!]! @belongsToMany
+
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+
+type Favorite {
+    id: ID!
+    user_id: Int!
+    photo_id: Int!
+    photo: Photo @belongsTo
+    user: User @belongsTo
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type Follower {
+    id: ID!
+    modele_id: Int!
+    user_id: Int!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+
+
+
+##input
+input CategoryInput {
+    name: String!
+}
+
+input PhotoInput {
+    modele_id: Int!
+    category_id: Int!
+    # uri: String!
+    bucket: String!
+    type: String!
+    caption: String!
+    detail: String!
+    featured: Boolean
+    publish: Boolean
+}
+
+input FavoriteInput {
+    photo_id: Int!
+    user_id: Int!
+}
+
+input FollowerInput {
+    modele_id: Int!
+    user_id: Int!
+}
+
+input UpdateUserInput {
+    id: ID!
+    name: String 
+    email: String
+    gender: Genre 
+    user_type: UserType 
+    telephone: String
+    avatar: String
+    modele: ModeleHasOne
+}
+
+input ModeleHasOne {
+    create: CreateModeleInput
+    update: UpdateModeleInput
+    upsert: UpsertModeleInput
+    delete: ID
+}
+
+input CreateModeleInput {
+    stage_name: String! 
+    bucket: String 
+    poster: String 
+    bio: String 
+    facebook: String 
+    instagram: String 
+    twitter: String 
+    youtube: String 
+}
+
+input UpdateModeleInput {
+    id: ID!
+    stage_name: String! 
+    bucket: String 
+    poster: String 
+    hash: String 
+    bio: String 
+    facebook: String 
+    instagram: String 
+    twitter: String 
+    youtube: String 
+}
+
+input UpsertModeleInput {
+    id: ID
+    stage_name: String! 
+    bucket: String 
+    poster: String 
+    hash: String 
+    bio: String 
+    facebook: String 
+    instagram: String 
+    twitter: String 
+    youtube: String 
+}
+
+input OrderByClause {
+	field: String!
+	order: SortOrder!
+}
+
+
+
+enum SortOrder {
+	ASC
+	DESC
 }

@@ -17,9 +17,9 @@ class CreateModelesTable extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->string('stage_name');
-            $table->string('image_bucket')->nullable();
+            $table->string('bucket')->nullable();
             $table->string('poster')->nullable();
-            $table->integer('has');
+            $table->integer('hash');
             $table->text('bio')->nullable();
             $table->string('facebook')->nullable();
             $table->string('instagram')->nullable();
