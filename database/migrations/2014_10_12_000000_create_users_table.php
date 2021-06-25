@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->string('gender');
             $table->string('telephone');
             $table->string('user_type');
-            $table->text('image_bucket')->nullable();
+            $table->text('bucket')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

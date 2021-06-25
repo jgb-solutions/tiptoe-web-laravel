@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 
@@ -32,7 +33,7 @@ class User extends Authenticatable
         'gender',
         'telephone',
         'user_type',
-        'image_bucket',
+        'bucket',
         'telephone',
     ];
 
@@ -56,6 +57,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $with = [
+      'favorites'
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -65,13 +70,8 @@ class User extends Authenticatable
         });
 
         self::created(function ($user) {
-            if (request()->has('model')) {
-
-                \Log::error('cool', ['error' => request()->model] );
-                Modele::create([
-                    'user_id'=> $user->id,
-                   request()->model]
-                );
+            if (!$input['avatar']) {
+                $input['avatar'] = "https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png";
             }
         });
 
@@ -83,5 +83,15 @@ class User extends Authenticatable
     public function modele(): HasOne
     {
         return $this->hasOne(Modele::class);
+    }
+
+    public function modeles(): BelongsToMany
+    {
+        return $this->belongsToMany(Modele::class, Follower::class, 'user_id', 'modele_id');
+    }
+
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Photo::class, Favorite::class, 'user_id', 'photo_id');
     }
 }

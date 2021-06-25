@@ -24,6 +24,7 @@ class UpdateSocialProviderUsersTable extends Migration
             $table->string('provider')->index();
             $table->string('provider_id')->index();
             $table->timestamps();
+            
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

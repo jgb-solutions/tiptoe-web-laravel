@@ -14,14 +14,31 @@ class ModeleSeeder extends Seeder
     public function run()
     {
         \DB::table('modeles')->insert([
-            'user_id'    => '3',
-            'stage_name' => 'Jey13',
-            'has'        => 3,
-            'bio'        => 'cool',
-            'facebook'   => 'jey13',
-            'instagram'  => 'jey13',
-            'twitter'    => 'jey13',
-            'youtube'    => 'jey13',
+            'user_id'    => '4',
+            'stage_name' => 'Ameli',
+            'poster'     => 'https://wallpapercave.com/wp/wp7105804.jpg',
+            'bio'        => 'I\'m a cool girl',
+            'hash'       => '796fb9s7-780f-44j6-ay46-06d337tb8f4g',
+            'facebook'   => 'amelia',
+            'instagram'  => '@amelia-jean',
+            'twitter'    => '@amelia-jean',
+            'youtube'    => 'Amelia Jean',
+            'verified'   => true,
+            
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        \DB::table('modeles')->insert([
+            'user_id'    => '5',
+            'stage_name' => 'Carlina',
+            'poster'     => 'http://anglictina.limic.com/wp-content/uploads/2019/12/102.jpg',
+            'bio'        => 'I\'m a bad girl',
+            'hash'       => '796fb9s7-780f-44j6-ay46-05d337tb8f4g',
+            'facebook'   => 'carlina',
+            'instagram'  => '@carlina-doe',
+            'twitter'    => '@carlina-doe',
+            'youtube'    => 'Carline Doe',
             'verified'   => true,
             
             'created_at' => now(),
