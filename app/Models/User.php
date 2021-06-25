@@ -70,13 +70,8 @@ class User extends Authenticatable
         });
 
         self::created(function ($user) {
-            if (request()->has('model')) {
-
-                \Log::error('cool', ['error' => request()->model] );
-                Modele::create([
-                    'user_id'=> $user->id,
-                   request()->model]
-                );
+            if (!$input['avatar']) {
+                $input['avatar'] = "https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png";
             }
         });
 

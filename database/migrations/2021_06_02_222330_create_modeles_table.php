@@ -19,7 +19,7 @@ class CreateModelesTable extends Migration
             $table->string('stage_name');
             $table->string('bucket')->nullable();
             $table->string('poster')->nullable();
-            $table->integer('hash');
+            $table->string('hash');
             $table->text('bio')->nullable();
             $table->string('facebook')->nullable();
             $table->string('instagram')->nullable();
