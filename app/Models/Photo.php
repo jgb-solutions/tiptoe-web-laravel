@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use App\Models\Modele;
 
 class Photo extends Model
 {
@@ -21,8 +22,9 @@ class Photo extends Model
         'caption',
         'detail',
         'featured',
-        'has',
+        'hash',
         'publish',
+        'type'
     ];
     
     public function category(): BelongsTo
@@ -49,7 +51,7 @@ class Photo extends Model
             $input['uri'] = $input['bucket'];
         });
 
-        self::created(function ($event) {
+        self::created(function ($photo) {
             
         });
 
@@ -75,6 +77,24 @@ class Photo extends Model
         }
 
         return $liked_by_me;
+    }
+
+    public function getForMyModeleAttribute()
+    {
+        $user = auth()->user();
+        
+        $my_modeles = $user->modeles;
+        
+        $for_my_modele = false;
+        
+        foreach($my_modeles as $modele) {
+            if ($modele->id === $this->modele->id) {
+                $for_my_modele = true;
+                break;
+            }
+        }
+
+        return $for_my_modele;
     }
 
     public function getLikesCountAttribute()
