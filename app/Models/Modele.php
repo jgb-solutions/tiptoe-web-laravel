@@ -19,7 +19,7 @@ class Modele extends Model
         'stage_name',
         'bucket',
         'poster',
-        'has',
+        'hash',
         'bio',
         'facebook',
         'instagram',
@@ -34,6 +34,10 @@ class Modele extends Model
 
         self::creating(function ($input) {
             $input['hash'] = Str::uuid();
+            if (!$input['bucket']) {
+                $input['bucket'] = "https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png";
+            }
+            $input['poster'] = $input['bucket'];
         });
 
         self::created(function ($event) {
@@ -59,4 +63,24 @@ class Modele extends Model
     {
         return $this->hasMany(Photo::class);
     }
+
+    public function getFollowedByMeAttribute()
+    {
+        $user = auth()->user();
+        
+        $my_modeles = $user->modeles;
+        
+        $followed_by_me = false;
+        
+        foreach($my_modeles as $modele) {
+            if ($modele->id === $this->id) {
+                $followed_by_me = true;
+                break;
+            }
+        }
+
+        return $followed_by_me;
+    }
+
+    
 }
