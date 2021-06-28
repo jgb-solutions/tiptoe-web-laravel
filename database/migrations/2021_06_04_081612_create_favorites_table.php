@@ -14,6 +14,7 @@ class CreateFavoritesTable extends Migration
     public function up()
     {
         Schema::create('favorites', function (Blueprint $table) {
+            $table->engine = ' MyISAM';
             $table->id();
             $table->bigInteger('photo_id');
             $table->bigInteger('user_id');

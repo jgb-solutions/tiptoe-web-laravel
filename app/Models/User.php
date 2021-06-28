@@ -66,13 +66,15 @@ class User extends Authenticatable
         parent::boot();
 
         self::creating(function ($data) {
+
+        if (!$data['avatar']) {
+            $data['avatar'] = "https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png";
+        }
             
         });
 
         self::created(function ($user) {
-            if (!$input['avatar']) {
-                $input['avatar'] = "https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png";
-            }
+            
         });
 
         self::updating(function(){

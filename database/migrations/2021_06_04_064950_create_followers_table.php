@@ -14,6 +14,7 @@ class CreateFollowersTable extends Migration
     public function up()
     {
         Schema::create('followers', function (Blueprint $table) {
+            $table->engine = ' MyISAM';
             $table->id();
             $table->bigInteger('user_id');
             $table->bigInteger('modele_id');

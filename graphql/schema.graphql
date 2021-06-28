@@ -66,6 +66,9 @@ type Mutation {
     toggleLike(input: ToggleLikeInput!  @spread): ToggleLikeResponse @field(resolver: "ToggleLike")
 
     toggleFollow(input: ToggleFollowInput!  @spread): ToggleFollowResponse @field(resolver: "ToggleFollow")
+
+    verifyUserEmail(input: VerifyUserEmailInput!  @spread): VerifyUserEmailResponse @field(resolver: "VerifyUserEmail")
+
 }
 
 
@@ -163,6 +166,10 @@ type ToggleFollowResponse {
     success: Boolean
 }
 
+type VerifyUserEmailResponse {
+    exist: Boolean
+}
+
 type Follower {
     id: ID!
     modele_id: Int!
@@ -185,6 +192,10 @@ input ToggleLikeInput {
 }
 input ToggleFollowInput {
     modele_id: String!
+}
+
+input VerifyUserEmailInput {
+    email: String!
 }
 
 input PhotoInput {

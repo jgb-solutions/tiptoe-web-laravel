@@ -14,6 +14,7 @@ class CreatePhotosTable extends Migration
     public function up()
     {
         Schema::create('photos', function (Blueprint $table) {
+            $table->engine = ' MyISAM';
             $table->id();
             $table->bigInteger('modele_id');
             $table->bigInteger('category_id');

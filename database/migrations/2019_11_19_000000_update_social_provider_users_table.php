@@ -19,6 +19,7 @@ class UpdateSocialProviderUsersTable extends Migration
             }
         });
         Schema::create('social_providers', function (Blueprint $table) {
+            $table->engine = ' MyISAM';
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
             $table->string('provider')->index();

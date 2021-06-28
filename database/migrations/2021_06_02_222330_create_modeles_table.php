@@ -14,6 +14,7 @@ class CreateModelesTable extends Migration
     public function up()
     {
         Schema::create('modeles', function (Blueprint $table) {
+            $table->engine = ' MyISAM';
             $table->id();
             $table->bigInteger('user_id');
             $table->string('stage_name');
