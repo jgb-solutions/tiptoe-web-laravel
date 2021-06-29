@@ -4,7 +4,7 @@ scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 # type Query @guard(with: ["api"]) {
-type Query {
+type Query @guard{
     users: [User!]! @paginate(type: "paginator" model: "App\\Models\\User")
     user(id: ID @eq): User @find(model: "App\\Models\\User")
     me: User! @auth
@@ -12,7 +12,7 @@ type Query {
     modeles(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Modele!]! @paginate(defaultCount: 20,  model: "App\\Models\\Modele")
     modele(hash: String @eq): Modele @find(model: "App\\Models\\Modele")
 
-    categories: [Category!]! @all(model: "App\\Models\\Category")
+    categories: [Category!]! @all(model: "App\\Models\\Category") 
     category(id: ID @eq): Category @find(model: "App\\Models\\Category")
 
     # photos: [Photo!]! @paginate(type: "paginator" model: "App\\Models\\Photo")
@@ -30,15 +30,8 @@ type Query {
 
 type Mutation {
     ##auth
-    login(input: LoginInput @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Login@resolve")
-    refreshToken(input: RefreshTokenInput @spread): RefreshTokenPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\RefreshToken@resolve")
-    logout: LogoutResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Logout@resolve")
-    forgotPassword(input: ForgotPasswordInput! @spread): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ForgotPassword@resolve")
-    updateForgottenPassword(input: NewPasswordWithCodeInput @spread): ForgotPasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\ResetPassword@resolve")
-    register(input: RegisterInput @spread): RegisterResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\Register@resolve")
-    socialLogin(input: SocialLoginInput! @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\SocialLogin@resolve")
-    verifyEmail(input: VerifyEmailInput! @spread): AuthPayload! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\VerifyEmail@resolve")
-    updatePassword(input: UpdatePassword! @spread): UpdatePasswordResponse! @field(resolver: "Joselfonseca\\LighthouseGraphQLPassport\\GraphQL\\Mutations\\UpdatePassword@resolve") @guard(with: ["api"])
+    login(input: LoginInput @spread): AuthPayload! @field(resolver: "Login")
+    register(input: RegisterInput @spread): RegisterResponse! @field(resolver: "Register")
 
     ##user
     updateUser(input: UpdateUserInput! @spread): User @update
@@ -285,4 +278,122 @@ input OrderByClause {
 enum SortOrder {
 	ASC
 	DESC
+}
+
+
+
+
+
+
+
+
+
+
+
+input LoginInput {
+    username: String!
+    password: String!
+}
+
+input RefreshTokenInput {
+    refresh_token: String
+}
+
+type AuthPayload {
+    access_token: String
+    refresh_token: String
+    expires_in: Int
+    token_type: String
+    user: User
+}
+
+type RefreshTokenPayload {
+    access_token: String!
+    refresh_token: String!
+    expires_in: Int!
+    token_type: String!
+}
+
+type LogoutResponse {
+    status: String!
+    message: String
+}
+
+type ForgotPasswordResponse {
+    status: String!
+    message: String
+}
+
+type RegisterResponse {
+    tokens: AuthPayload
+    status: RegisterStatuses!
+}
+
+type UpdatePasswordResponse {
+    status: String!
+    message: String
+}
+
+enum RegisterStatuses {
+    MUST_VERIFY_EMAIL
+    SUCCESS
+}
+
+enum UserType {
+	MODEL
+	CONSUMER
+}
+
+enum Genre {
+	MALE
+	FEMALE
+    OTHER
+}
+
+input ForgotPasswordInput {
+    email: String! @rules(apply: ["required", "email"])
+}
+
+input NewPasswordWithCodeInput {
+    email: String! @rules(apply: ["required", "email"])
+    token: String! @rules(apply: ["required", "string"])
+    password: String! @rules(apply: ["required", "confirmed", "min:8"])
+    password_confirmation: String!
+}
+
+input RegisterInput {
+    name: String! @rules(apply: ["required", "string"])
+    email: String! @rules(apply: ["required", "email", "unique:users,email"])
+    password: String! @rules(apply: ["required", "min:8"])
+    gender: Genre @rules(apply: ["required"])
+    user_type: UserType @rules(apply: ["required"])
+    telephone: String! @rules(apply: ["required", "string"])
+    modele: ModeleHasOne
+}
+
+input CreateModeleInput {
+    stage_name: String! 
+    bucket: String 
+    poster: String 
+    has: Int 
+    bio: String 
+    facebook: String 
+    instagram: String 
+    twitter: String 
+    youtube: String 
+}
+
+input SocialLoginInput {
+    provider: String! @rules(apply: ["required"])
+    token: String! @rules(apply: ["required"])
+}
+
+input VerifyEmailInput {
+    token: String!
+}
+
+input UpdatePassword {
+    old_password: String!
+    password: String! @rules(apply: ["required", "confirmed", "min:8"])
+    password_confirmation: String!
 }
