@@ -129,6 +129,7 @@ type Photo {
     type: String
     publish: Boolean
     liked_by_me: Boolean
+    is_for_me: Boolean
     likes_count: Int
     category: Category! @belongsTo
     modele: Modele! @belongsTo

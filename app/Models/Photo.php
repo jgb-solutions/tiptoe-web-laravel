@@ -117,5 +117,23 @@ class Photo extends Model
             }
         }
     }
+
+    public function getIsForMeAttribute()
+    {
+        $user = auth()->user();
+        
+        $my_photos = $user->modele->photos;
+        
+        $is_for_me = false;
+        
+        foreach($my_photos as $photo) {
+            if ($photo->id === $this->id) {
+                $is_for_me = true;
+                break;
+            }
+        }
+
+        return $is_for_me;
+    }
     
 }
