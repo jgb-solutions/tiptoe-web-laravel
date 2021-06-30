@@ -68,7 +68,7 @@ class User extends Authenticatable
 
         self::creating(function ($data) {
             $data['password'] = Hash::make($data['password']);
-            
+            $data['first_login'] = true;
             if (!$data['avatar']) {
                 $data['avatar'] = "https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png";
             }
