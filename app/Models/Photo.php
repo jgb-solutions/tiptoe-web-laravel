@@ -133,7 +133,7 @@ class Photo extends Model
             }
         }
 
-        return $is_for_me;
+        return $is_for_me; 
     }
     
 }
