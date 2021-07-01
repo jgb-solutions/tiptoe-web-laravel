@@ -219,6 +219,7 @@ input UpdateUserInput {
     name: String 
     email: String
     gender: Genre 
+    first_login: Boolean
     user_type: UserType 
     telephone: String
     avatar: String
