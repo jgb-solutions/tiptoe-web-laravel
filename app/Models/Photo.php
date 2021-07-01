@@ -122,14 +122,17 @@ class Photo extends Model
     {
         $user = auth()->user();
         
-        $my_photos = $user->modele->photos;
-        
         $is_for_me = false;
         
-        foreach($my_photos as $photo) {
-            if ($photo->id === $this->id) {
-                $is_for_me = true;
-                break;
+        if ($user->modele) {
+            # code...
+            $my_photos = $user->modele->photos;
+            
+            foreach($my_photos as $photo) {
+                if ($photo->id === $this->id) {
+                    $is_for_me = true;
+                    break;
+                }
             }
         }
 
