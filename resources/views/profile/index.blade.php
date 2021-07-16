@@ -76,6 +76,7 @@
 #timeline:checked~.tabs #timeline-label,
 #tab-two:checked~.tabs #tab-two-label,
 #tab-three:checked~.tabs #tab-three-label,
+#tab-five:checked~.tabs #tab-five-label,
 #tab-four:checked~.tabs #tab-four-label {
     background-color: #fff;
     cursor: default;
@@ -85,6 +86,7 @@
 #tab-one:checked~.tabs #tab-one-panel,
 #timeline:checked~.tabs #timeline-label,
 #tab-two:checked~.tabs #tab-two-panel,
+#tab-five:checked~.tabs #tab-five-label,
 #tab-three:checked~.tabs #tab-three-panel,
 #tab-four:checked~.tabs #tab-four-panel {
     display: block;
@@ -124,6 +126,10 @@
         order: 9;
     }
 
+    .flex-tabs #tab-five-label {
+        order: 11;
+    }
+
 
 
     .flex-tabs #tab-one-panel {
@@ -146,10 +152,15 @@
         order: 10;
     }
 
+    .flex-tabs #tab-five-panel {
+        order: 12;
+    }
+
     #timeline:checked~.tabs #timeline-label,
     #tab-one:checked~.tabs #tab-one-label,
     #tab-two:checked~.tabs #tab-two-label,
     #tab-three:checked~.tabs #tab-three-label,
+    #tab-five:checked~.tabs #tab-five-label,
     #tab-four:checked~.tabs #tab-four-label {
         border-bottom: none;
     }
@@ -158,6 +169,7 @@
     #tab-one:checked~.tabs #tab-one-panel,
     #tab-two:checked~.tabs #tab-two-panel,
     #tab-three:checked~.tabs #tab-three-panel,
+    #tab-five:checked~.tabs #tab-five-label,
     #tab-four:checked~.tabs #tab-four-panel {
         border-bottom: 1px solid #ccc;
     }
@@ -407,8 +419,8 @@
         </div>
         <div class="col-md-8 text-center ">
             <div class="card">
-                <div class="card-body worko-tabs" style="margin-top:0px;">
-                    <div class="row">
+                <div class="card-body worko-tabs" style="margin-top:0px; width:98%;">
+                    <div class="row w-100">
                         <div class="w-100">
                             @if($user->user_type === "model")
                             <input class="state" type="radio" title="timeline" name="tabs-state" id="timeline"
@@ -419,8 +431,9 @@
                             <input class="state" type="radio" title="tab-two" name="tabs-state" id="tab-two" />
                             <input class="state" type="radio" title="tab-three" name="tabs-state" id="tab-three" />
                             <input class="state" type="radio" title="tab-four" name="tabs-state" id="tab-four" />
+                            <input class="state" type="radio" title="tab-five" name="tabs-state" id="tab-five" />
 
-                            <div class="tabs flex-tabs">
+                            <div class="tabs flex-tabs w-100">
                                 @if($user->user_type === "model")
                                 <label for="timeline" id="timeline-label" class="tab">Timeline</label>
                                 @endif
@@ -428,9 +441,7 @@
 
                                 @if($user->user_type === "consumer")
                                 <label for="tab-four" id="tab-four-label" class="tab">Models</label>
-                                <div id="tab-four-panel" class="panel">
-                                    @include('models.model-list', ['models' => $user->modeles])
-                                </div>
+
                                 @endif
 
                                 @if($user->user_type === "model")
@@ -438,22 +449,37 @@
 
                                 <label for="tab-three" id="tab-three-label" class="tab">Followers</label>
 
+                                @endif
+
+                                <label for="tab-five" id="tab-five-label" class="tab">Action</label>
+
+
+                                @if($user->user_type === "model")
                                 <div id="timeline-label" class="panel active">
                                     @include('profile.timeline', ['modele' => $user->modele])
-                                </div>
-
-                                <div id="tab-two-panel" class="panel">
-                                    @include('profile.model-information', ['modele' => $user->modele])
                                 </div>
 
                                 <div id="tab-three-panel" class="panel">
                                     @include('followers.follower-list', ['followers' => $user->modele->followers])
                                 </div>
+
+                                <div id="tab-two-panel" class="panel">
+                                    @include('profile.model-information', ['modele' => $user->modele])
+                                </div>
                                 @endif
+
+                                <div id="tab-five-label" class="panel w-100">
+                                    <!-- <livewire:user-status :user="$user" /> -->
+                                    @livewire('user-status', ['user' => $user])
+                                </div>
 
                                 <div id="tab-one-panel"
                                     class="panel @if($user->user_type === 'consumer') active @endif">
                                     @include('profile.personal-information', ['user' => $user])
+                                </div>
+
+                                <div id="tab-four-panel" class="panel">
+                                    @include('models.model-list', ['models' => $user->modeles])
                                 </div>
 
                             </div>
