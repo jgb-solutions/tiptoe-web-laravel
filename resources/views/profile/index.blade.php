@@ -355,7 +355,7 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-unstyled team-members">
-                        @foreach($user->modeles->take(3) as $modele)
+                        @forelse($user->modeles->take(3) as $modele)
                         <li onclick="location.href='/profile/{{ $modele->user->id }}'" class=" cursor-pointer">
                             <div class="row">
                                 <div class="col-md-2 col-2">
@@ -378,7 +378,11 @@
                                 </div>
                             </div>
                         </li>
-                        @endforeach
+                        @empty
+                        <li>
+                            You don't follow any model yet
+                        </li>
+                        @endforelse
                     </ul>
                 </div>
                 @else
@@ -388,7 +392,7 @@
 
                 <div class="card-body">
                     <ul class="list-unstyled team-members">
-                        @foreach($user->modele->followers->take(3) as $follower)
+                        @forelse($user->modele->followers->take(3) as $follower)
                         <li onclick="location.href='/profile/{{ $follower->id }}'" class=" cursor-pointer">
                             <div class="row">
                                 <div class="col-md-2 col-2">
@@ -411,7 +415,11 @@
                                 </div>
                             </div>
                         </li>
-                        @endforeach
+                        @empty
+                        <li>
+                            You don't have any follower yet
+                        </li>
+                        @endforelse
                     </ul>
                 </div>
                 @endif

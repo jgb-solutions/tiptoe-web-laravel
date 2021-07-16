@@ -40,12 +40,6 @@
                     </ul>
                 </div>
             </li>
-            <li class="{{ $elementActive == 'icons' ? 'active' : '' }}">
-                <a href="{{ route('page.index', 'icons') }}">
-                    <i class="nc-icon nc-diamond"></i>
-                    <p>{{ __('Icons') }}</p>
-                </a>
-            </li>
 
             <!-- <li class="active-pro {{ $elementActive == 'upgrade' ? 'active' : '' }}">
                 sdwd

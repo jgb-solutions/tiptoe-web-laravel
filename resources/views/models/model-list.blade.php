@@ -1,6 +1,6 @@
 <h3>Models</h3>
 <ul class="list-unstyled team-members">
-    @foreach($models as $model)
+    @forelse($models as $model)
     <li onclick="location.href='/profile/{{ $model->user->id }}'" class=" cursor-pointer">
         <div class="row">
             <div class="col-md-1 col-1 mt-1">
@@ -18,5 +18,9 @@
             </div>
         </div>
     </li>
-    @endforeach
+    @empty
+    <li>
+        You don't follow any model yet
+    </li>
+    @endforelse
 </ul>
