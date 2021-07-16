@@ -22,6 +22,8 @@ class ProfileController extends Controller
 
     public function show(User $user)
     {
+        // $stripeCustomer = $user->createOrGetStripeCustomer();
+        // dd(Cashier::findBillable($user->stripe_id));
         return view('profile.index', compact('user'));
     }
 
