@@ -16,6 +16,7 @@ class UserController extends Controller
      */
     public function index(User $model)
     {
-        return view('users.index', ['users' => $model->paginate(15)]);
+        $users = $model->where('user_type', 'consumer')->paginate(15);
+        return view('users.index', compact('users'));
     }
 }
