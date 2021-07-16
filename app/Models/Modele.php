@@ -64,6 +64,11 @@ class Modele extends Model
         return $this->hasMany(Photo::class);
     }
 
+    public function photoLiked()
+    {
+        return $this->hasManyThrough(Favorite::class, Photo::class);
+    }
+
     public function getFollowedByMeAttribute()
     {
         $user = auth()->user();
