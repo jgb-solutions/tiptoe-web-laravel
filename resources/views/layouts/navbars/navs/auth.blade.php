@@ -59,13 +59,19 @@
                         </p>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink2">
-                        <form class="dropdown-item" action="{{ route('logout') }}" id="formLogOut" method="POST" style="display: none;">
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item cursor-pointer"
+                                onclick="$('#formLogOutr').submit();">{{ __('Log out') }}</a>
+                            <a class="dropdown-item"
+                                href="{{ route('profile', ['user' => auth()->user()->id]) }}">{{ __('My profile') }}</a>
+                        </div>
+
+                        <form class="dropdown-item" action="{{ route('logout') }}" id="formLogOutr" method="POST"
+                            style="display: none;">
                             @csrf
                         </form>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" onclick="document.getElementById('formLogOut').submit();">{{ __('Log out') }}</a>
-                            <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('My profile') }}</a>
-                        </div>
+
                     </div>
                 </li>
             </ul>

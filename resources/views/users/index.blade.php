@@ -1,6 +1,6 @@
 @extends('layouts.app', [
 'class' => '',
-'elementActive' => 'user'
+'elementActive' => request()->type.'s'
 ])
 
 @section('content')
@@ -12,7 +12,7 @@
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">Users</h3>
+                                <h3 class="mb-0 text-capitalize">{{ request()->type.'s' }}</h3>
                             </div>
                             <!-- <div class="col-4 text-right">
                                 <a href="#" class="btn btn-sm btn-primary">Add user</a>
@@ -27,20 +27,15 @@
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
+                                    <th class="text-center">#</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Creation Date</th>
-                                    <th scope="col"></th>
+                                    <th scope="col">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Admin Admin</td>
-                                    <td>
-                                        <a href="mailto:admin@paper.com">admin@paper.com</a>
-                                    </td>
-                                    <td>25/02/2020 11:37</td>
-                                </tr>
+                                <livewire:user-list />
                             </tbody>
                         </table>
                     </div>

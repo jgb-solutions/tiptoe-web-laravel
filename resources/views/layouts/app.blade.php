@@ -22,11 +22,17 @@
     <link href="{{ asset('paper') }}/css/paper-dashboard.css?v=2.0.0" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="{{ asset('paper') }}/demo/demo.css" rel="stylesheet" />
+    @livewireStyles
+
+    <style>
+    .cursor-pointer {
+        cursor: pointer;
+    }
+    </style>
 
 </head>
 
 <body class="{{ $class }}">
-
     @auth()
     @include('layouts.page_templates.auth')
     <!-- @include('layouts.navbars.fixed-plugin') -->
@@ -57,6 +63,7 @@
     @stack('scripts')
 
     @include('layouts.navbars.fixed-plugin-js')
+    @livewireScripts
 </body>
 
 </html>
