@@ -35,7 +35,6 @@ class User extends Authenticatable
         'telephone',
         'user_type',
         'bucket',
-        'telephone',
     ];
 
 
