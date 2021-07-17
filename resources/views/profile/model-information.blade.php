@@ -63,4 +63,13 @@
             <span> {{ $modele->verified ? 'Verified' : 'Not verified' }} </span>
         </div>
     </div>
+
+    <div class="profile-info-row">
+        <div class="profile-info-name"> Price </div>
+        <div class="profile-info-value">
+            <b class="text-warning">
+                {{ $modele->user->modelPlan ? '$'.$modele->user->modelPlan->cost : 'Not defined yet' }}
+            </b>
+        </div>
+    </div>
 </div>
