@@ -14,6 +14,7 @@ class ModelPlan extends Model
         'user_id',
         'name',
         'stripe_plan',
+        'stripe_product_id',
         'cost',
     ];
 

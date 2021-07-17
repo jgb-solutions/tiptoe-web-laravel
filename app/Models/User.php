@@ -98,7 +98,7 @@ class User extends Authenticatable
 
     public function modelPlan(): HasOne
     {
-        return $this->hasOne(ModelePlan::class);
+        return $this->hasOne(ModelPlan::class);
     }
 
     public function modeles(): BelongsToMany

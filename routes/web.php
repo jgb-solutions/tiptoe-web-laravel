@@ -30,6 +30,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('profile/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
+	
+	Route::get('/plan', [App\Http\Controllers\ModelPlanController::class, 'AddPrice']);
 });
 
 Route::group(['middleware' => 'auth'], function () {

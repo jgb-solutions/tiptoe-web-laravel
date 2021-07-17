@@ -4,7 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use App\Models\ModelPlan as Plan;
 use App\Models\User;
-use Stripe;
+use \Stripe\Stripe;  
 
 class ModelPlan 
 {
@@ -12,7 +12,8 @@ class ModelPlan
 
     public function __construct()
     {
-        $this->stripeId = Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(config('services.stripe.secret'));
+        $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
     }
     
     /**
@@ -30,23 +31,28 @@ class ModelPlan
             'name' => $name,
         ]);
         
-        //Stripe Plan Creation
-        $stripe->prices->create([
-            'unit_amount' => $cost * 100,
-            'currency' => 'usd',
-            'recurring' => ['interval' => 'month'],
-            'product' => $stripeProduct->id,
-          ]);
+        \DB::beginTransaction();
+        try{
+            //Stripe Plan Creation
+            $stripePlanCreation = $this->stripe->prices->create([
+                'unit_amount' => $cost * 100,
+                'currency' => 'usd',
+                'recurring' => ['interval' => 'month'],
+                'product' => $stripeProduct->id,
+            ]);
 
-        $data['stripe_plan'] = $stripePlanCreation->id;
-
-        $success = !!Plan::create([
-            'name' => $name,
-            'user_id' => $user_id,
-            'stripe_plan' => $stripePlanCreation->id,
-            'cost' => $cost
-        ]);
-
+            $success = !!Plan::create([
+                'name' => $name,
+                'user_id' => $user_id,
+                'stripe_plan' => $stripePlanCreation->id,
+                'cost' => $cost
+            ]);
+        }catch(\Exception $e){
+            \DB::rollback();
+            \Log::info('The price cannot be create at this time', ['error' => $e] );
+        }
+        \DB::commit();
+        
         return ['success'=> $success];
     }
 }
