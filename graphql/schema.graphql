@@ -63,6 +63,11 @@ type Mutation {
     verifyUserEmail(input: VerifyUserEmailInput!  @spread): VerifyUserEmailResponse @field(resolver: "VerifyUserEmail")
 
     modelPlan(input: ModelPlanInput!  @spread): ModelPlanResponse @field(resolver: "ModelPlan")
+    addPrice(input: AddPriceInput!  @spread): AddPriceResponse @field(resolver: "AddPrice")
+
+    addCard(input: CardInput!  @spread): CardResponse @field(resolver: "AddCard")
+    deleteCard(input: CardInput!  @spread): CardResponse @field(resolver: "DeleteCard")
+    setDefaultCard(input: CardInput!  @spread): CardResponse @field(resolver: "SetDefaultCard")
 }
 
 
@@ -165,6 +170,14 @@ type ModelPlanResponse {
     success: Boolean
 }
 
+type AddPriceResponse {
+    success: Boolean
+}
+
+type CardResponse {
+    success: Boolean
+}
+
 type VerifyUserEmailResponse {
     exist: Boolean
 }
@@ -190,12 +203,24 @@ input ToggleLikeInput {
     photo_id: String!
 }
 
+input CardInput {
+    card: String!
+    default: Boolean
+}
+
 input ToggleFollowInput {
     modele_id: String!
+    payment_method: String
+    stripe_price: String
+    subscription_id: String
 }
 
 input VerifyUserEmailInput {
     email: String!
+}
+
+input CancelSubscriptionInput {
+    paymentMethod: String!
 }
 
 input PhotoInput {
@@ -279,6 +304,12 @@ input UpsertModeleInput {
 input ModelPlanInput {
     user_id: String!
     name: String!
+    cost: Int!
+}
+
+input AddPriceInput {
+    user_id: String!
+    stripePrice_id: String!
     cost: Int!
 }
 
