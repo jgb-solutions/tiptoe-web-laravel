@@ -4,6 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use App\Models\Follower;
 use App\Models\Favorite;
+use App\Models\Modele;
 use \Stripe\Stripe;
 
 class ToggleFollow
@@ -28,15 +29,12 @@ class ToggleFollow
         $user = auth()->user();
         $success = false;
 
-        $modeles = $user->modeles->where('id', $modele_id)->first();
+        $modele = $user->modeles->where('id', $modele_id)->first();
         
-        if ($modeles) {
+        if ($modele) {
             \DB::beginTransaction();
             try{
-                $this->stripe->subscriptions->cancel(
-                    $subscription_id,
-                    []
-                );
+                $user->subscription($modele->stage_name)->cancel();
                   
                 $success = !!Follower::where([['user_id', $user->id], ['modele_id', $modele_id]])->first()->delete();
             }catch(\Exception $e){
@@ -48,19 +46,16 @@ class ToggleFollow
 
             \DB::beginTransaction();
             try{
+                $modele = Modele::find($modele_id);
+                
                 $user->createOrGetStripeCustomer();
                 $user->updateDefaultPaymentMethod($payment_method);
-                            
-                $this->stripe->subscriptions->create([
-                    'customer' => $user->stripe_id,
-                    'items' => [
-                    ['price' => $stripe_price],
-                    ],
-                ]);
+
+                $user->newSubscription($modele->stage_name, $stripe_price)->create($payment_method, []);
                 
                 $success = !!Follower::create([
                     'user_id'  => $user->id,
-                    'modele_id' => $modele_id
+                    'modele_id' => $modele_id 
                 ]);
                 
             }catch(\Exception $e){
