@@ -2,7 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\Models\ModelPlan as Plan;
+use App\Models\ModelPlan;
 use App\Models\User;
 use \Stripe\Stripe;
 

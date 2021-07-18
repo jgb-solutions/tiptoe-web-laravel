@@ -18,7 +18,7 @@ class DeleteCard
 
         \DB::beginTransaction();
         try{
-            $user->findPaymentMethod($card)->delete();
+            $success = !!$user->findPaymentMethod($card)->delete();
         }catch(\Exception $e){
             \DB::rollback();
             \Log::info('We cannot delete your card at this time. Try agian', ['error' => $e] );

@@ -302,13 +302,13 @@ input UpsertModeleInput {
 }
 
 input ModelPlanInput {
-    user_id: String!
+    user_id: Int!
     name: String!
     cost: Int!
 }
 
 input AddPriceInput {
-    user_id: String!
+    user_id: Int!
     stripePrice_id: String!
     cost: Int!
 }
