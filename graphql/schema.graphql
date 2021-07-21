@@ -226,7 +226,7 @@ input CancelSubscriptionInput {
 input PhotoInput {
     modele_id: Int!
     category_id: Int!
-    # uri: String!
+    uri: String!
     bucket: String!
     type: String!
     caption: String!
