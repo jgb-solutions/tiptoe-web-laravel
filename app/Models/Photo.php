@@ -48,7 +48,6 @@ class Photo extends Model
 
         self::creating(function ($input) {
             $input['hash'] = Str::uuid();
-            $input['uri'] = $input['bucket'];
         });
 
         self::created(function ($photo) {
