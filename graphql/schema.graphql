@@ -23,6 +23,13 @@ type Query @guard{
     # favoritePhoto(user_id: Int @eq, page: Int = 1, first: Int = 10, orderBy: [OrderByClause!] @orderBy): [Photo!]!
     favoritePhoto( page: Int = 1, first: Int = 10, orderBy: [OrderByClause!] @orderBy): [Photo!]! @paginate(defaultCount: 20,  model: "App\\Models\\Photo")
  
+    getPublishableKey: PublishableKey! @field(resolver: "GetPublishableKey")
+
+    createPaymentIntent: PaymentIntentResponse! @field(resolver: "CreatePaymentIntent")
+
+    myCards: [GetCardResponse!]! @field(resolver: "MyCards")
+
+    getModelPrice(hash: String): GetModelPriceResponse! @field(resolver: "GetModelPrice")
 }
 
 
@@ -96,6 +103,7 @@ type Modele {
     bucket: String
     poster: String
     hash: String
+    price: String
     bio: String
     facebook: String
     instagram: String
@@ -158,6 +166,14 @@ type Favorite {
     updated_at: DateTime!
 }
 
+type PublishableKey {
+    key: String
+}
+
+type PaymentIntentResponse {
+    client_secret: String,
+}
+
 type ToggleLikeResponse {
     success: Boolean
 }
@@ -176,6 +192,13 @@ type AddPriceResponse {
 
 type CardResponse {
     success: Boolean
+}
+
+type GetCardResponse {
+    id: String
+    last4: String,
+    exp_month: String,
+    exp_year: String
 }
 
 type VerifyUserEmailResponse {
@@ -326,8 +349,6 @@ enum SortOrder {
 	DESC
 }
 
-
-
 input LoginInput {
     username: String!
     password: String!
@@ -335,6 +356,10 @@ input LoginInput {
 
 input RefreshTokenInput {
     refresh_token: String
+}
+
+type GetModelPriceResponse {
+    price: String!
 }
 
 type AuthPayload {
