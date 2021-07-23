@@ -32,6 +32,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
 	
 	Route::get('/plan', [App\Http\Controllers\ModelPlanController::class, 'AddPrice']);
+
+	Route::get('/create-account', [App\Http\Controllers\PaymentController::class, 'createExpressAccount']);
+
+	// Route::get('/plan', [App\Http\Controllers\ModelPlanController::class, 'AddPrice']);
 });
 
 Route::group(['middleware' => 'auth'], function () {

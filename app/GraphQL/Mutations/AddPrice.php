@@ -10,10 +10,10 @@ class AddPrice
 {
     protected $stripeId;
 
-    public function __construct()
+    public function __construct() 
     {
         Stripe::setApiKey(config('services.stripe.secret'));
-        $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+        $this->stripe = new \Stripe\StripeClient(config('services.stripe.secret'));
     }
     /**
      * @param  null  $_
