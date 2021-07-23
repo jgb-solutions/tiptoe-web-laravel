@@ -13,7 +13,7 @@ class ModelPlanController extends Controller
     public function __construct()
     {
         Stripe::setApiKey(config('services.stripe.secret'));
-        $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+        $this->stripe = new \Stripe\StripeClient(config('services.stripe.secret'));
         
     }
     

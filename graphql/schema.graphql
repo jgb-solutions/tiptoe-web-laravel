@@ -29,7 +29,7 @@ type Query @guard{
 
     myCards: [GetCardResponse!]! @field(resolver: "MyCards")
 
-    getModelPrice(hash: String): GetModelPriceResponse! @field(resolver: "GetModelPrice")
+    getModelPriceStripeId(hash: String): GetModelPriceStripeIdResponse! @field(resolver: "GetModelPriceStripeId")
 }
 
 
@@ -358,8 +358,8 @@ input RefreshTokenInput {
     refresh_token: String
 }
 
-type GetModelPriceResponse {
-    price: String!
+type GetModelPriceStripeIdResponse {
+    price_id: String!
 }
 
 type AuthPayload {

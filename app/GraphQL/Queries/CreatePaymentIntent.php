@@ -2,8 +2,6 @@
 
 namespace App\GraphQL\Queries;
 
-// use \Stripe\Stripe;
-
 class CreatePaymentIntent
 {
     /**

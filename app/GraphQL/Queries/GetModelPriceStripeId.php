@@ -3,7 +3,7 @@
 namespace App\GraphQL\Queries;
 use App\Models\Modele;
 
-class GetModelPrice
+class GetModelPriceStripeId
 {
     /**
      * @param  null  $_
@@ -15,13 +15,13 @@ class GetModelPrice
         extract($args);
         $modele = Modele::where('hash',$hash)->first();
         
-        $price = '';
+        $price_id = '';
         
         if($modele && $modele->user->modelPlan)
         {
-            $price = $modele->user->modelPlan->stripe_plan;
+            $price_id = $modele->user->modelPlan->stripe_plan;
         }
 
-        return ["price" => $price];
+        return ["price_id" => $price_id];
     }
 }
