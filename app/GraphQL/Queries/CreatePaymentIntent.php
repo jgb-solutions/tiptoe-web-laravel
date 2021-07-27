@@ -11,7 +11,17 @@ class CreatePaymentIntent
     public function __invoke($_, array $args)
     {
         // TODO implement the resolver
-        $data = ["client_secret" => auth()->user()->createSetupIntent()->client_secret];
-        return $data;
+        extract($args);
+        $client_secret = "";
+
+        $intents = auth()->user()->createSetupIntent();
+
+        if($intents)
+        {
+            $client_secret = $intents->client_secret;
+        }
+        
+
+        return ["client_secret" => $client_secret];
     }
 }

@@ -16,11 +16,9 @@ class AddCard
 
         $user = auth()->user();
         
-        $paymentMethod = request()->paymentMethod;
         \DB::beginTransaction();
         try{
-            $card = $user->addPaymentMethod($paymentMethod);
-            $default && $user->updateDefaultPaymentMethod($paymentMethod);
+            $success = !!$user->addPaymentMethod($card);
         }catch(\Exception $e){
             \DB::rollback();
             \Log::info('We cannot add your card at this time. Try agian', ['error' => $e] );
