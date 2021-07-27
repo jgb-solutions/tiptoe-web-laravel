@@ -8,7 +8,7 @@ use \Stripe\Stripe;
 
 class AddPrice
 {
-    protected $stripeId;
+    protected $stripe;
 
     public function __construct() 
     {
@@ -23,32 +23,64 @@ class AddPrice
     {
         // TODO implement the resolver
         extract($args);
+        
         $success = false;
-
-        $product = $this->stripe->prices->retrieve( $stripePrice_id, [] );
-
-                
+        $user = User::find($user_id);
         $price = ModelPlan::where('user_id', $user_id)->first();
         
-        if($price->cost ==  $cost)
+        if($price)
         {
-            return "This price is alredy there";
+            $product = $this->stripe->prices->retrieve( $price->stripe_plan, [] );
+            
+            if($price->cost ==  $cost)
+            {
+                return "This price is alredy there";
+            }
+            else{
+                \DB::beginTransaction();
+                try{
+                    $stripePlanCreation = $this->stripe->prices->create([
+                        'unit_amount' => $cost * 100,
+                        'currency' => 'usd',
+                        'recurring' => ['interval' => 'month'],
+                        'product' => $product->product,
+                    ]);
+                    
+                    $success = !!$price->update([
+                        'cost' => $cost,
+                        'stripe_plan' => $stripePlanCreation->id,
+                    ]);
+                    
+                }catch(\Exception $e){
+                    \DB::rollback();
+                    \Log::info('The price cannot be create at this time', ['error' => $e] );
+                }
+                \DB::commit();
+            }
         }
-        else{
+        else
+        {
+             //create stripe product
+            $stripeProduct = $this->stripe->products->create([
+                'name' => $user->modele->stage_name,
+            ]);
+            
             \DB::beginTransaction();
             try{
+                //Stripe Plan Creation
                 $stripePlanCreation = $this->stripe->prices->create([
                     'unit_amount' => $cost * 100,
                     'currency' => 'usd',
                     'recurring' => ['interval' => 'month'],
-                    'product' => $product->product,
+                    'product' => $stripeProduct->id,
                 ]);
-                
-                $success = !!$price->update([
-                    'cost' => $cost,
+
+                $success = !!ModelPlan::create([
+                    'name' => $user->modele->stage_name,
+                    'user_id' => $user_id,
                     'stripe_plan' => $stripePlanCreation->id,
+                    'cost' => $cost
                 ]);
-                
             }catch(\Exception $e){
                 \DB::rollback();
                 \Log::info('The price cannot be create at this time', ['error' => $e] );
