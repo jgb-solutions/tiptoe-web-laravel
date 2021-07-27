@@ -13,15 +13,22 @@ class GetModelPriceStripeId
     {
         // TODO implement the resolver
         extract($args);
-        $modele = Modele::where('hash',$hash)->first();
         
-        $price_id = '';
-        
-        if($modele && $modele->user->modelPlan)
+        $price = [];
+
+        if(isset($hash))
         {
-            $price_id = $modele->user->modelPlan->stripe_plan;
+            $modele = Modele::where('hash',$hash)->first();
+            
+            if($modele && $modele->user->modelPlan)
+            {
+                $price = [
+                    "price_id" => $modele->user->modelPlan->stripe_plan,
+                    "cost"     => $modele->user->modelPlan->cost
+                ];
+            }
         }
 
-        return ["price_id" => $price_id];
+        return $price;
     }
 }
