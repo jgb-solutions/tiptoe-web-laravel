@@ -87,5 +87,24 @@ class Modele extends Model
         return $followed_by_me;
     }
 
+    public function getnewFollowerCountAttribute()
+    {
+        $new_follower_count = 0;
+
+        $my_followers = $this->followers;
+
+        foreach($my_followers as $follower)
+        {
+            foreach ($follower->followers as $val) {
+                if ($val->created_at->format('F') === date('F')) {
+                    $new_follower_count ++;
+                    break;
+                }
+            }
+        }
+        
+        return $new_follower_count;
+    }
+
     
 }
