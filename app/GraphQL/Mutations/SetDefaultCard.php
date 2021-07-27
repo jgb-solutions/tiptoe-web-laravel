@@ -29,12 +29,17 @@ class SetDefaultCard
         \DB::beginTransaction();
         try{
             $user->updateDefaultPaymentMethod($paymentMethod);
+            $success = !!$user->updateDefaultPaymentMethodFromStripe();
         }catch(\Exception $e){
             \DB::rollback();
             \Log::info('We cannot change your default card at this time. Try agian', ['error' => $e] );
         }
         \DB::commit();
         
-        return ['success'=> $success];
+        return [
+            'success'=> $success,
+            'id' => $paymentMethod->id,
+            'last4' => $paymentMethod->card->last4
+        ];
     }
 }
