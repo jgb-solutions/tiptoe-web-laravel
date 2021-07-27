@@ -12,6 +12,9 @@ type Query @guard{
     modeles(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Modele!]! @paginate(defaultCount: 20,  model: "App\\Models\\Modele")
     modele(hash: String @eq): Modele @find(model: "App\\Models\\Modele")
 
+    fetchMyModels: [Modele!] @field(resolver: "MyModels")
+    fetchMyFollowers: [User!] @field(resolver: "myFollowers")
+
     categories: [Category!]! @all(model: "App\\Models\\Category") 
     category(id: ID @eq): Category @find(model: "App\\Models\\Category")
 
@@ -25,11 +28,14 @@ type Query @guard{
  
     getPublishableKey: PublishableKey! @field(resolver: "GetPublishableKey")
 
-    createPaymentIntent: PaymentIntentResponse! @field(resolver: "CreatePaymentIntent")
-
     myCards: [GetCardResponse!]! @field(resolver: "MyCards")
+    myInvoices: [InvoceResponse!]! @field(resolver: "MyInvoices")
 
-    getModelPriceStripeId(hash: String): GetModelPriceStripeIdResponse! @field(resolver: "GetModelPriceStripeId")
+
+    getModelPrice(hash: String): GetModelPriceStripeIdResponse! @field(resolver: "GetModelPriceStripeId")
+
+    createPaymentIntent: PaymentIntentResponse! @field(resolver: "CreatePaymentIntent")
+    deleteInvoice(invoiceId: String): AddPriceResponse! @field(resolver: "DeleteInvoice")
 }
 
 
@@ -92,6 +98,7 @@ type User {
     modele: Modele @hasOne
     modeles: [Modele!]! @belongsToMany
     favorites: [Photo!]! @belongsToMany
+    pm_last_four: String
 
     created_at: DateTime!
     updated_at: DateTime!
@@ -192,14 +199,26 @@ type AddPriceResponse {
 
 type CardResponse {
     success: Boolean
+    id: String
+    last4: String
 }
 
 type GetCardResponse {
     id: String
-    last4: String,
-    exp_month: String,
+    brand: String
+    last4: String
+    exp_month: String
     exp_year: String
 }
+
+type InvoceResponse {
+    id: String
+    amount_paid: String
+    created: String
+    hosted_invoice_url: String
+    lines: String
+}
+
 
 type VerifyUserEmailResponse {
     exist: Boolean
@@ -228,14 +247,11 @@ input ToggleLikeInput {
 
 input CardInput {
     card: String!
-    default: Boolean
 }
 
 input ToggleFollowInput {
     modele_id: String!
     payment_method: String
-    stripe_price: String
-    subscription_id: String
 }
 
 input VerifyUserEmailInput {
@@ -331,8 +347,7 @@ input ModelPlanInput {
 }
 
 input AddPriceInput {
-    user_id: Int!
-    stripePrice_id: String!
+    user_id: String!
     cost: Int!
 }
 
@@ -358,8 +373,13 @@ input RefreshTokenInput {
     refresh_token: String
 }
 
+input PaymentIntentInput {
+    hash: String!
+}
+
 type GetModelPriceStripeIdResponse {
-    price_id: String!
+    price_id: String
+    cost: String
 }
 
 type AuthPayload {
