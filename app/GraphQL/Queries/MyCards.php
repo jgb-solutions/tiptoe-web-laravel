@@ -19,6 +19,7 @@ class MyCards
             [
                 'id'=> $card->id, 
                 "last4"=> $card->card->last4, 
+                "brand"=> $card->card->brand, 
                 "exp_month"=> $card->card->exp_month, 
                 "exp_year"=> $card->card->exp_year
             ]);
