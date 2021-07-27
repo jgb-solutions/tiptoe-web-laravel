@@ -99,6 +99,7 @@ type User {
     modeles: [Modele!]! @belongsToMany
     favorites: [Photo!]! @belongsToMany
     pm_last_four: String
+    is_new: Boolean
 
     created_at: DateTime!
     updated_at: DateTime!
@@ -118,6 +119,7 @@ type Modele {
     youtube: String
     verified: Boolean
     followed_by_me: Boolean
+    new_follower_count: Int
     user: User @belongsTo
     followers: [User!]! @belongsToMany
     photos: [Photo!]! @hasMany
