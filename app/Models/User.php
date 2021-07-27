@@ -110,4 +110,30 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Photo::class, Favorite::class, 'user_id', 'photo_id');
     }
+
+    public function followers(): HasMany
+    {
+        return $this->hasMany(Follower::class);
+    }
+
+    public function getIsNewAttribute()
+    {
+        $user = auth()->user();
+        $is_new = false;
+
+        if ($user->user_type === "model") {
+            $my_followers = $user->modele->followers;
+
+            foreach($my_followers as $follower)
+            {
+                foreach ($follower->followers as $val) {
+                    if ($val->created_at->format('F') === date('F')) {
+                        $is_new = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return $is_new;
+    }
 }
