@@ -345,7 +345,6 @@ input UpdateModeleInput {
     stage_name: String
     bucket: String 
     poster: String 
-    hash: String 
     bio: String 
     facebook: String 
     instagram: String 
