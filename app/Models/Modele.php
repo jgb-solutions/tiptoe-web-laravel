@@ -86,13 +86,37 @@ class Modele extends Model
     {
         $user = auth()->user();
         $modele_account_data = null;
-        
+
         if($user->user_type === "MODEL")
         {
             $modele_account_data = $user->modele->modeleAccount;
         }
-        
+
         return $modele_account_data;
+    }
+
+    public function getFollowersCountAttribute()
+    {
+        $user = auth()->user();
+        $followers_count = 0;
+
+        if ($user->user_type === "MODEL") {
+            $followers_count = $user->modele->followers->count();
+        }
+        
+        return $followers_count;
+    }
+
+    public function getPhotosCountAttribute()
+    {
+        $user = auth()->user();
+        $photos_count = 0;
+
+        if ($user->user_type === "MODEL") {
+            $photos_count = $user->modele->photos->count();
+        }
+        
+        return $photos_count;
     }
 
     public function getFollowedByMeAttribute()
