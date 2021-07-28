@@ -94,6 +94,8 @@ type User {
     admin: Boolean!
     first_login: Boolean!
     user_type: String!
+    is_model: Boolean
+    is_consumer: Boolean
     avatar: String
     telephone: String!
     gender: String!

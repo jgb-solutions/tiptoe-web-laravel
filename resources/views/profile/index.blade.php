@@ -309,7 +309,7 @@
                         </p>
                     </div>
                 </div>
-                @if($user->user_type === "MODEL")
+                @if($user->is_model)
                 <div class="card-footer">
                     <div class="button-container">
                         <div class="row">
@@ -349,7 +349,7 @@
             </div>
 
             <div class="card">
-                @if($user->user_type === "CONSUMER")
+                @if($user->is_consumer)
                 <div class="card-header">
                     <h4 class="card-title">{{ __('Models') }}</h4>
                 </div>
@@ -430,7 +430,7 @@
                 <div class="card-body worko-tabs" style="margin-top:0px; width:98%;">
                     <div class="row w-100">
                         <div class="w-100">
-                            @if($user->user_type === "MODEL")
+                            @if($user->is_model)
                             <input class="state" type="radio" title="timeline" name="tabs-state" id="timeline"
                                 checked />
                             @endif
@@ -442,17 +442,17 @@
                             <input class="state" type="radio" title="tab-five" name="tabs-state" id="tab-five" />
 
                             <div class="tabs flex-tabs w-100">
-                                @if($user->user_type === "MODEL")
+                                @if($user->is_model)
                                 <label for="timeline" id="timeline-label" class="tab">Timeline</label>
                                 @endif
                                 <label for="tab-one" id="tab-one-label" class="tab">About</label>
 
-                                @if($user->user_type === "CONSUMER")
+                                @if($user->is_consumer)
                                 <label for="tab-four" id="tab-four-label" class="tab">Models</label>
 
                                 @endif
 
-                                @if($user->user_type === "MODEL")
+                                @if($user->is_model)
                                 <label for="tab-two" id="tab-two-label" class="tab">Model Information</label>
 
                                 <label for="tab-three" id="tab-three-label" class="tab">Followers</label>
@@ -462,7 +462,7 @@
                                 <label for="tab-five" id="tab-five-label" class="tab">Action</label>
 
 
-                                @if($user->user_type === "MODEL")
+                                @if($user->is_model)
                                 <div id="timeline-label" class="panel active">
                                     @include('profile.timeline', ['modele' => $user->modele])
                                 </div>
@@ -481,8 +481,7 @@
                                     @livewire('user-status', ['user' => $user])
                                 </div>
 
-                                <div id="tab-one-panel"
-                                    class="panel @if($user->user_type === 'consumer') active @endif">
+                                <div id="tab-one-panel" class="panel @if($user->is_consumer) active @endif">
                                     @include('profile.personal-information', ['user' => $user])
                                 </div>
 

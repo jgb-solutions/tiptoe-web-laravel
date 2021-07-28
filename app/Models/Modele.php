@@ -87,7 +87,7 @@ class Modele extends Model
         $user = auth()->user();
         $modele_account_data = null;
 
-        if($user->user_type === "MODEL")
+        if($user->is_model)
         {
             $modele_account_data = $user->modele->modeleAccount;
         }
@@ -100,7 +100,7 @@ class Modele extends Model
         $user = auth()->user();
         $followers_count = 0;
 
-        if ($user->user_type === "MODEL") {
+        if ($user->is_model) {
             $followers_count = $user->modele->followers->count();
         }
         
@@ -112,7 +112,7 @@ class Modele extends Model
         $user = auth()->user();
         $photos_count = 0;
 
-        if ($user->user_type === "MODEL") {
+        if ($user->is_model) {
             $photos_count = $user->modele->photos->count();
         }
         

@@ -116,12 +116,20 @@ class User extends Authenticatable
         return $this->hasMany(Follower::class);
     }
 
+    public function getIsModelAttribute() {
+        return $this->user_type === "MODEL";
+    }
+
+    public function getIsConsumerAttribute() {
+        return $this->user_type === "CONSUMER";
+    }
+
     public function getIsNewAttribute()
     {
         $user = auth()->user();
         $is_new = false;
 
-        if ($user->user_type === "MODEL") {
+        if ($user->is_model) {
             $my_followers = $user->modele->followers;
 
             foreach($my_followers as $follower)
