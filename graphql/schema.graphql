@@ -143,6 +143,7 @@ type ModeleAccount {
 type ModeleTransaction {
     id: ID!
     amount: Int!
+    type: String!
 
     created_at: DateTime!
     updated_at: DateTime!

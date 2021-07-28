@@ -18,6 +18,7 @@ class CreateModeleTransactionsTable extends Migration
             $table->id();
             $table->unsignedInteger('modele_id');
             $table->bigInteger('amount');
+            $table->string('type');
             $table->timestamps();
 
             $table->foreign('modele_id')->references('id')->on('modeles');

@@ -13,6 +13,7 @@ class ModeleTransaction extends Model
     protected $fillable = [
         'modele_id',
         'amount',
+        'type'
     ];
 
     public function modele(): BelongsTo
