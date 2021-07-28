@@ -124,6 +124,8 @@ type Modele {
     new_follower_count: Int
     user: User @belongsTo
     followers: [User!]! @belongsToMany
+    photos_count: Int
+    followers_count: Int
     photos: [Photo!]! @hasMany
     modele_account_data: ModeleAccount
 
