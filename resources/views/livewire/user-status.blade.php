@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    @if($user->user_type === "model")
+    @if($user->user_type === "MODEL")
     <div class="profile-info-row">
         <div class="profile-info-name"> Model status </div>
 

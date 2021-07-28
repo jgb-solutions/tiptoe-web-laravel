@@ -121,7 +121,7 @@ class User extends Authenticatable
         $user = auth()->user();
         $is_new = false;
 
-        if ($user->user_type === "model") {
+        if ($user->user_type === "MODEL") {
             $my_followers = $user->modele->followers;
 
             foreach($my_followers as $follower)
