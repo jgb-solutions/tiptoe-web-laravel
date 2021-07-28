@@ -36,6 +36,8 @@ type Query @guard{
 
     createPaymentIntent: PaymentIntentResponse! @field(resolver: "CreatePaymentIntent")
     deleteInvoice(invoiceId: String): AddPriceResponse! @field(resolver: "DeleteInvoice")
+
+    myTransaction(modele_id: ID! @where(modele_id: modele_id)): [ModeleTransaction!]! @paginate(defaultCount: 20,  model: "App\\Models\\ModeleTransaction")
 }
 
 
@@ -123,6 +125,24 @@ type Modele {
     user: User @belongsTo
     followers: [User!]! @belongsToMany
     photos: [Photo!]! @hasMany
+    modele_account_data: ModeleAccount
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type ModeleAccount {
+    id: ID!
+    account: Int!
+    balance: Int!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type ModeleTransaction {
+    id: ID!
+    amount: Int!
 
     created_at: DateTime!
     updated_at: DateTime!
