@@ -133,6 +133,7 @@ type Modele {
 
 type ModeleAccount {
     id: ID!
+    modele_id: ID!
     account: Int!
     balance: Int!
 
