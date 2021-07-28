@@ -40,8 +40,11 @@ class Modele extends Model
             $input['poster'] = $input['bucket'];
         });
 
-        self::created(function ($event) {
-            
+        self::created(function ($modele) {
+            $modele->modelAccount()->create([
+                "account" => 0,
+                "balance" => 0
+            ]);
         });
 
         self::updating(function(){
@@ -64,9 +67,32 @@ class Modele extends Model
         return $this->hasMany(Photo::class);
     }
 
+    public function modeleAccount()
+    {
+        return $this->hasOne(ModeleAccount::class);
+    }
+
+    public function modeleTransactions(): HasMany
+    {
+        return $this->hasMany(ModeleTransaction::class);
+    }
+
     public function photoLiked()
     {
         return $this->hasManyThrough(Favorite::class, Photo::class);
+    }
+
+    public function getModeleAccountDataAttribute()
+    {
+        $user = auth()->user();
+        $modele_account_data = null;
+        
+        if($user->user_type === "MODEL")
+        {
+            $modele_account_data = $user->modele->modeleAccount;
+        }
+        
+        return $modele_account_data;
     }
 
     public function getFollowedByMeAttribute()
