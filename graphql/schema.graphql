@@ -47,9 +47,11 @@ type Mutation {
     ##auth
     login(input: LoginInput @spread): AuthPayload! @field(resolver: "Login")
     register(input: RegisterInput @spread): RegisterResponse! @field(resolver: "Register")
+    verifyUserEmail(input: VerifyUserEmailInput!  @spread): VerifyUserEmailResponse @field(resolver: "VerifyUserEmail")
 
     ##user
     updateUser(input: UpdateUserInput! @spread): User @update
+    changePassword(input: ChangePasswordInput! @spread): [ChangePasswordResponse!]! @field(resolver: "ChangePassword")
 
     ##category
     createCategory(input: CategoryInput! @spread): Category @create
@@ -74,8 +76,6 @@ type Mutation {
     toggleLike(input: ToggleLikeInput!  @spread): ToggleLikeResponse @field(resolver: "ToggleLike")
 
     toggleFollow(input: ToggleFollowInput!  @spread): ToggleFollowResponse @field(resolver: "ToggleFollow")
-
-    verifyUserEmail(input: VerifyUserEmailInput!  @spread): VerifyUserEmailResponse @field(resolver: "VerifyUserEmail")
 
     modelPlan(input: ModelPlanInput!  @spread): ModelPlanResponse @field(resolver: "ModelPlan")
     addPrice(input: AddPriceInput!  @spread): AddPriceResponse @field(resolver: "AddPrice")
@@ -261,12 +261,22 @@ type Follower {
     updated_at: DateTime!
 }
 
+type ChangePasswordResponse {
+    success: Boolean
+    message: String
+}
+
 
 
 
 ##input
 input CategoryInput {
     name: String!
+}
+
+input ChangePasswordInput {
+    password: String!
+    new_password: String!
 }
 
 input ToggleLikeInput {
