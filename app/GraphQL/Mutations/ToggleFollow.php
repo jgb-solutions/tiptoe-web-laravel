@@ -53,6 +53,16 @@ class ToggleFollow
 
                 $user->newSubscription($modele->stage_name, $modele->user->modelPlan->stripe_plan)->create($payment_method, []);
                 
+                $modele->modeleTransactions()->create([
+                    "amount" => $modele->user->modelPlan->cost,
+                    "type"   => "depot"
+                ]);
+
+                $modele->modeleAccount->update([
+                    "account" => $modele->user->modelPlan->cost + $modele->modeleAccount->account,
+                    "balance" => $modele->user->modelPlan->cost + $modele->modeleAccount->balance
+                ]);
+
                 $success = !!Follower::create([
                     'user_id'  => $user->id,
                     'modele_id' => $modele_id 

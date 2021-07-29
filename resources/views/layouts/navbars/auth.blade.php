@@ -26,13 +26,13 @@
                     id="usersManagement">
                     <ul class="nav">
                         <li class="{{ $elementActive == 'models' ? 'active' : '' }}">
-                            <a href="{{ route('users', ['type' => 'model']) }}">
+                            <a href="{{ route('users', ['type' => 'MODEL']) }}">
                                 <span class="sidebar-mini-icon">{{ __('M') }}</span>
                                 <span class="sidebar-normal">{{ __(' Model') }}</span>
                             </a>
                         </li>
                         <li class="{{ $elementActive == 'consumers' ? 'active' : '' }}">
-                            <a href="{{ route('users', ['type' => 'consumer']) }}">
+                            <a href="{{ route('users', ['type' => 'CONSUMER']) }}">
                                 <span class="sidebar-mini-icon">{{ __('C') }}</span>
                                 <span class="sidebar-normal">{{ __(' Consumer') }}</span>
                             </a>

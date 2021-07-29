@@ -67,7 +67,7 @@
     <div class="profile-info-row">
         <div class="profile-info-name"> Price </div>
         <div class="profile-info-value">
-            <b class="text-warning">
+            <b class="" style="color: #AA3853">
                 {{ $modele->user->modelPlan ? '$'.$modele->user->modelPlan->cost : 'Not defined yet' }}
             </b>
         </div>

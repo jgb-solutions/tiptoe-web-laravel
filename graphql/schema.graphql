@@ -36,6 +36,8 @@ type Query @guard{
 
     createPaymentIntent: PaymentIntentResponse! @field(resolver: "CreatePaymentIntent")
     deleteInvoice(invoiceId: String): AddPriceResponse! @field(resolver: "DeleteInvoice")
+
+    myTransaction(modele_id: ID! @where(modele_id: modele_id)): [ModeleTransaction!]! @paginate(defaultCount: 20,  model: "App\\Models\\ModeleTransaction")
 }
 
 
@@ -92,6 +94,8 @@ type User {
     admin: Boolean!
     first_login: Boolean!
     user_type: String!
+    is_model: Boolean
+    is_consumer: Boolean
     avatar: String
     telephone: String!
     gender: String!
@@ -122,7 +126,29 @@ type Modele {
     new_follower_count: Int
     user: User @belongsTo
     followers: [User!]! @belongsToMany
+    photos_count: Int
+    followers_count: Int
     photos: [Photo!]! @hasMany
+    modele_account_data: ModeleAccount
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type ModeleAccount {
+    id: ID!
+    modele_id: ID!
+    account: Int!
+    balance: Int!
+
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type ModeleTransaction {
+    id: ID!
+    amount: Int!
+    type: String!
 
     created_at: DateTime!
     updated_at: DateTime!
@@ -321,7 +347,6 @@ input UpdateModeleInput {
     stage_name: String
     bucket: String 
     poster: String 
-    hash: String 
     bio: String 
     facebook: String 
     instagram: String 

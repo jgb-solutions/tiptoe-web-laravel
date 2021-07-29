@@ -191,10 +191,10 @@
                 </div>
             </div>
             @if($photo->type === 'photo')
-            <img class="width100" src="{{asset($photo->bucket)}}" alt="">
+            <img class="width100" src="{{asset($photo->uri)}}" alt="">
             @else
             <video class="video-fluid z-depth-1" autoplay loop controls muted>
-                <source src="{{asset($photo->bucket)}}" type="video/mp4" />
+                <source src="{{asset($photo->uri)}}" type="video/mp4" />
             </video>
             @endif
         </div>
