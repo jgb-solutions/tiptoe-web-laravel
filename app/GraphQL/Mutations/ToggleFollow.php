@@ -50,6 +50,7 @@ class ToggleFollow
                 
                 $user->createOrGetStripeCustomer();
                 $user->updateDefaultPaymentMethod($payment_method);
+                $user->updateDefaultPaymentMethodFromStripe();
 
                 $user->newSubscription($modele->stage_name, $modele->user->modelPlan->stripe_plan)->create($payment_method, []);
                 
