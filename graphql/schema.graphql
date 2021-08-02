@@ -50,8 +50,16 @@ type Mutation {
     verifyUserEmail(input: VerifyUserEmailInput!  @spread): VerifyUserEmailResponse @field(resolver: "VerifyUserEmail")
 
     ##user
-    updateUser(input: UpdateUserInput! @spread): User @update
+    updateUserWithModel(id: ID!, input: UpdateUserWithModelInput! @spread): User @update(model: "App\\Models\\User")
+    updateUser(id: ID!, input: UpdateUserInput! @spread): User @update(model: "App\\Models\\User")
     changePassword(input: ChangePasswordInput! @spread): [ChangePasswordResponse!]! @field(resolver: "ChangePassword")
+    deleteUser(input: DeleteUserInput! @spread): User @delete
+
+    ##model
+    toggleFollow(input: ToggleFollowInput!  @spread): ToggleFollowResponse @field(resolver: "ToggleFollow")
+    modelPlan(input: ModelPlanInput!  @spread): ModelPlanResponse @field(resolver: "ModelPlan")
+    addPrice(input: AddPriceInput!  @spread): AddPriceResponse @field(resolver: "AddPrice")
+    deleteModel(input: DeleteModelInput! @spread): DeleteModeleResponse! @field(resolver: "deleteModel")
 
     ##category
     createCategory(input: CategoryInput! @spread): Category @create
@@ -75,11 +83,7 @@ type Mutation {
 
     toggleLike(input: ToggleLikeInput!  @spread): ToggleLikeResponse @field(resolver: "ToggleLike")
 
-    toggleFollow(input: ToggleFollowInput!  @spread): ToggleFollowResponse @field(resolver: "ToggleFollow")
-
-    modelPlan(input: ModelPlanInput!  @spread): ModelPlanResponse @field(resolver: "ModelPlan")
-    addPrice(input: AddPriceInput!  @spread): AddPriceResponse @field(resolver: "AddPrice")
-
+    ##card
     addCard(input: CardInput!  @spread): CardResponse @field(resolver: "AddCard")
     deleteCard(input: CardInput!  @spread): CardResponse @field(resolver: "DeleteCard")
     setDefaultCard(input: CardInput!  @spread): CardResponse @field(resolver: "SetDefaultCard")
@@ -135,6 +139,11 @@ type Modele {
     updated_at: DateTime!
 }
 
+type DeleteModeleResponse {
+    success: Boolean
+    user: User
+}
+
 type ModeleAccount {
     id: ID!
     modele_id: ID!
@@ -181,7 +190,7 @@ type Photo {
     is_for_me: Boolean
     likes_count: Int
     category: Category! @belongsTo
-    modele: Modele! @belongsTo
+    modele: Modele @belongsTo
     users: [User!]! @belongsToMany
 
 
@@ -267,6 +276,47 @@ type ChangePasswordResponse {
 }
 
 
+type GetModelPriceStripeIdResponse {
+    price_id: String
+    cost: String
+}
+
+type AuthPayload {
+    access_token: String
+    refresh_token: String
+    expires_in: Int
+    token_type: String
+    user: User
+}
+
+type RefreshTokenPayload {
+    access_token: String!
+    refresh_token: String!
+    expires_in: Int!
+    token_type: String!
+}
+
+type LogoutResponse {
+    status: String!
+    message: String
+}
+
+type ForgotPasswordResponse {
+    status: String!
+    message: String
+}
+
+type RegisterResponse {
+    tokens: AuthPayload
+    status: RegisterStatuses!
+}
+
+type UpdatePasswordResponse {
+    status: String!
+    message: String
+}
+
+
 
 
 ##input
@@ -323,6 +373,17 @@ input FollowerInput {
 }
 
 input UpdateUserInput {
+    id: ID!
+    name: String 
+    email: String
+    gender: Genre 
+    first_login: Boolean
+    user_type: UserType 
+    telephone: String
+    avatar: String
+}
+
+input UpdateUserWithModelInput {
     id: ID!
     name: String 
     email: String
@@ -394,7 +455,13 @@ input OrderByClause {
 	order: SortOrder!
 }
 
+input DeleteModelInput{
+    id: String
+}
 
+input DeleteUserInput{
+    id: String
+}
 
 enum SortOrder {
 	ASC
@@ -412,46 +479,6 @@ input RefreshTokenInput {
 
 input PaymentIntentInput {
     hash: String!
-}
-
-type GetModelPriceStripeIdResponse {
-    price_id: String
-    cost: String
-}
-
-type AuthPayload {
-    access_token: String
-    refresh_token: String
-    expires_in: Int
-    token_type: String
-    user: User
-}
-
-type RefreshTokenPayload {
-    access_token: String!
-    refresh_token: String!
-    expires_in: Int!
-    token_type: String!
-}
-
-type LogoutResponse {
-    status: String!
-    message: String
-}
-
-type ForgotPasswordResponse {
-    status: String!
-    message: String
-}
-
-type RegisterResponse {
-    tokens: AuthPayload
-    status: RegisterStatuses!
-}
-
-type UpdatePasswordResponse {
-    status: String!
-    message: String
 }
 
 enum RegisterStatuses {
