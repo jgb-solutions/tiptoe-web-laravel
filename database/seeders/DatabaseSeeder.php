@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call([CategorySeeder::class]);
         $this->call([ModeleSeeder::class]);
         $this->call([PhotoSeeder::class]);
+        $this->call([ModeleAccountSeeder::class]);
     }
 }
