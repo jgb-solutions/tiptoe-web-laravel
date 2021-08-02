@@ -31,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->text('bucket')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

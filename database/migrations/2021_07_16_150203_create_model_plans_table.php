@@ -22,7 +22,7 @@ class CreateModelPlansTable extends Migration
             $table->float('cost');
             $table->timestamps();
             
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

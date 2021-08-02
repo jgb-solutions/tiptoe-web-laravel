@@ -20,7 +20,7 @@ class CreateFollowersTable extends Migration
             $table->bigInteger('modele_id');
             $table->timestamps();
 
-            $table->foreign('user_id', 'modele_id')->references('id')->on('users', 'modeles');
+            $table->foreign('user_id', 'modele_id')->references('id')->on('users', 'modeles')->onDelete('cascade');
         });
     }
 

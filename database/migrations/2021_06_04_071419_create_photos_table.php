@@ -28,7 +28,7 @@ class CreatePhotosTable extends Migration
             $table->boolean('publish')->default(false);
             $table->timestamps();
 
-            $table->foreign('modele_id')->references('id')->on('modeles');
+            $table->foreign('modele_id')->references('id')->on('modeles')->onDelete('cascade');
         });
     }
 

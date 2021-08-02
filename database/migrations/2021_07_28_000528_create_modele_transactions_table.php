@@ -21,7 +21,7 @@ class CreateModeleTransactionsTable extends Migration
             $table->string('type');
             $table->timestamps();
 
-            $table->foreign('modele_id')->references('id')->on('modeles');
+            $table->foreign('modele_id')->references('id')->on('modeles')->onDelete('cascade');
         });
     }
 
