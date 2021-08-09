@@ -15,9 +15,10 @@ class CreatePasswordResetsTable extends Migration
     {
         Schema::create('password_resets', function (Blueprint $table) {
             $table->engine = ' MyISAM';
+            $table->bigIncrements('id');
             $table->string('email')->index();
             $table->string('token');
-            $table->timestamp('created_at')->nullable();
+            $table->timestamps();
         });
     }
 

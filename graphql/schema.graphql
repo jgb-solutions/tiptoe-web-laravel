@@ -26,8 +26,6 @@ type Query @guard{
     # favoritePhoto(user_id: Int @eq, page: Int = 1, first: Int = 10, orderBy: [OrderByClause!] @orderBy): [Photo!]!
     favoritePhoto( page: Int = 1, first: Int = 10, orderBy: [OrderByClause!] @orderBy): [Photo!]! @paginate(defaultCount: 20,  model: "App\\Models\\Photo")
  
-    getPublishableKey: PublishableKey! @field(resolver: "GetPublishableKey")
-
     myCards: [GetCardResponse!]! @field(resolver: "MyCards")
     myInvoices: [InvoceResponse!]! @field(resolver: "MyInvoices")
 
@@ -40,6 +38,13 @@ type Query @guard{
     myTransaction(modele_id: ID! @where(modele_id: modele_id)): [ModeleTransaction!]! @paginate(defaultCount: 20,  model: "App\\Models\\ModeleTransaction")
 }
 
+extend type Query {
+    getPublishableKey: PublishableKey! @field(resolver: "GetPublishableKey")
+
+    verifyEmail(email: String): VerifyEmailResponse @field(resolver: "VerifyEmail")
+    verifyCode(input: CodeVerificationInput): VerifyCodeResponse @field(resolver: "VerifyCode")
+
+}
 
 
 
@@ -52,8 +57,10 @@ type Mutation {
     ##user
     updateUserWithModel(id: ID!, input: UpdateUserWithModelInput! @spread): User @update(model: "App\\Models\\User")
     updateUser(id: ID!, input: UpdateUserInput! @spread): User @update(model: "App\\Models\\User")
-    changePassword(input: ChangePasswordInput! @spread): [ChangePasswordResponse!]! @field(resolver: "ChangePassword")
+    changePassword(input: ChangePasswordInput! @spread): ChangePasswordResponse @field(resolver: "ChangePassword")
     deleteUser(input: DeleteUserInput! @spread): User @delete
+
+    resetPassword(input: ResetPasswordInput! @spread): ResetPasswordResponse @field(resolver: "ResetPassword")
 
     ##model
     toggleFollow(input: ToggleFollowInput!  @spread): ToggleFollowResponse @field(resolver: "ToggleFollow")
@@ -218,6 +225,15 @@ type PaymentIntentResponse {
     client_secret: String,
 }
 
+type VerifyEmailResponse {
+    message: String,
+}
+
+type VerifyCodeResponse {
+    success: Boolean,
+}
+
+
 type ToggleLikeResponse {
     success: Boolean
 }
@@ -316,10 +332,25 @@ type UpdatePasswordResponse {
     message: String
 }
 
+type ResetPasswordResponse {
+    message: String
+    success: Boolean
+}
+
 
 
 
 ##input
+input CodeVerificationInput {
+    code: String
+    email: String
+}
+
+input ResetPasswordInput {
+    email: String
+    password: String
+}
+
 input CategoryInput {
     name: String!
 }
