@@ -1,6 +1,6 @@
 @component('mail::message')
 # Reset Password
 
-Please use {{$code}} to reset your password,
+Your reset password code is: {{$code}}
 
 @endcomponent
