@@ -14,9 +14,10 @@ class UploadUrlQuery
     $wasabi = \Storage::disk('wasabi');
     $client = $wasabi->getDriver()->getAdapter()->getClient();
     $filePath = static::makeUploadFilePath($name);
+
     try {
      $options = [
-      'Bucket' => config('filesystems.wasabi.bucket'),
+      'Bucket' => config('filesystems.disks.wasabi.bucket'),
       'Key' => static::makeUploadFilePath($name),
       'ACL' => 'public-read'
       ];
@@ -33,9 +34,9 @@ class UploadUrlQuery
       ];
     } catch (\Exception $e) {
        return [
-        'signedUrl' => $e,
+        'signedUrl' => 'error message',
         'filename' => $filePath,
-    ];
+      ];
     }
 
   }
@@ -43,6 +44,7 @@ class UploadUrlQuery
   public static function makeUploadFolder()
   {
       $user = auth()->guard('api')->user();
+
       return 'user_' . $user->id . '/' . date('Y/m/d');
   }
 

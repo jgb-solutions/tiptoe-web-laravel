@@ -332,7 +332,7 @@ input PhotoInput {
     bucket: String!
     type: String!
     caption: String!
-    detail: String!
+    # detail: String!
     featured: Boolean
     publish: Boolean
 }
