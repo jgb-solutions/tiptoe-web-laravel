@@ -29,6 +29,7 @@ class ChangePassword
             $response = ["success"=> false, "message"=> "Incorrect password"];
         }
 
-        return ["response" => $response];
+        return $response;
+        // return ["response" => $response];
     }
 }

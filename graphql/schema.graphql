@@ -1,66 +1,81 @@
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
-scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+scalar DateTime
+    @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
 # type Query @guard(with: ["api"]) {
-type Query @guard{
-    users: [User!]! @paginate(type: "paginator" model: "App\\Models\\User")
+type Query @guard {
+    users: [User!]! @paginate(type: "paginator", model: "App\\Models\\User")
     user(id: ID @eq): User @find(model: "App\\Models\\User")
     me: User! @auth
 
-    modeles(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Modele!]! @paginate(defaultCount: 20,  model: "App\\Models\\Modele")
+    # getPublishableKey: PublishableKey! @field(resolver: "GetPublishableKey")
+
+    modeles(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Modele!]! @paginate(defaultCount: 20, model: "App\\Models\\Modele")
     modele(hash: String @eq): Modele @find(model: "App\\Models\\Modele")
 
     fetchMyModels: [Modele!] @field(resolver: "MyModels")
     fetchMyFollowers: [User!] @field(resolver: "myFollowers")
 
-    categories: [Category!]! @all(model: "App\\Models\\Category") 
+    categories: [Category!]! @all(model: "App\\Models\\Category")
     category(id: ID @eq): Category @find(model: "App\\Models\\Category")
 
     # photos: [Photo!]! @paginate(type: "paginator" model: "App\\Models\\Photo")
     photo(id: ID @eq): Photo @find(model: "App\\Models\\Photo")
 
-    photos(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Photo!]! @paginate(defaultCount: 20,  model: "App\\Models\\Photo")
+    photos(page: Int = 1, orderBy: [OrderByClause!] @orderBy): [Photo!]! @paginate(defaultCount: 20, model: "App\\Models\\Photo")
 
     # favoritePhoto(user_id: Int @eq, page: Int = 1, first: Int = 10, orderBy: [OrderByClause!] @orderBy): [Photo!]!
     favoritePhoto( page: Int = 1, first: Int = 10, orderBy: [OrderByClause!] @orderBy): [Photo!]! @paginate(defaultCount: 20,  model: "App\\Models\\Photo")
  
-    getPublishableKey: PublishableKey! @field(resolver: "GetPublishableKey")
-
     myCards: [GetCardResponse!]! @field(resolver: "MyCards")
     myInvoices: [InvoceResponse!]! @field(resolver: "MyInvoices")
-
 
     getModelPrice(hash: String): GetModelPriceStripeIdResponse! @field(resolver: "GetModelPriceStripeId")
 
     createPaymentIntent: PaymentIntentResponse! @field(resolver: "CreatePaymentIntent")
     deleteInvoice(invoiceId: String): AddPriceResponse! @field(resolver: "DeleteInvoice")
 
-    myTransaction(modele_id: ID! @where(modele_id: modele_id)): [ModeleTransaction!]! @paginate(defaultCount: 20,  model: "App\\Models\\ModeleTransaction")
+    myTransaction(modele_id: ID! @where(modele_id: modele_id) ): [ModeleTransaction!]! @paginate(defaultCount: 20, model: "App\\Models\\ModeleTransaction")
+
+    uploadUrl(input: UploadUrlInput! @spread): UploadUrl! @field(resolver: "UploadUrlQuery")
+}
+
+extend type Query {
+    verifyEmail(email: String): VerifyEmailResponse @field(resolver: "VerifyEmail")
+    verifyCode(input: CodeVerificationInput): VerifyCodeResponse @field(resolver: "VerifyCode")
+
+    getPublishableKey: PublishableKey! @field(resolver: "GetPublishableKey")
 }
 
 
 
-
-type Mutation {
-    ##auth
-    login(input: LoginInput @spread): AuthPayload! @field(resolver: "Login")
-    register(input: RegisterInput @spread): RegisterResponse! @field(resolver: "Register")
-    verifyUserEmail(input: VerifyUserEmailInput!  @spread): VerifyUserEmailResponse @field(resolver: "VerifyUserEmail")
-
+type Mutation @guard{
     ##user
-    updateUser(input: UpdateUserInput! @spread): User @update
-    changePassword(input: ChangePasswordInput! @spread): [ChangePasswordResponse!]! @field(resolver: "ChangePassword")
+    updateUserWithModel(id: ID!, input: UpdateUserWithModelInput! @spread): User @update(model: "App\\Models\\User")
+    updateUser(id: ID!, input: UpdateUserInput! @spread): User @update(model: "App\\Models\\User")
+    changePassword(input: ChangePasswordInput! @spread): ChangePasswordResponse @field(resolver: "ChangePassword")
+    deleteUser(input: DeleteUserInput! @spread): User @delete
+    updateAvatar(input: UpdateAvatarInput! @spread): UpdatePhotoResponse @field(resolver: "UpdateAvatar")
+
+    
+
+    ##model
+    toggleFollow(input: ToggleFollowInput!  @spread): ToggleFollowResponse @field(resolver: "ToggleFollow")
+    modelPlan(input: ModelPlanInput!  @spread): ModelPlanResponse @field(resolver: "ModelPlan")
+    addPrice(input: AddPriceInput!  @spread): AddPriceResponse @field(resolver: "AddPrice")
+    deleteModel(input: DeleteModelInput! @spread): DeleteModeleResponse! @field(resolver: "deleteModel")
+    updatePoster(input: UpdatePosterInput! @spread): UpdatePhotoResponse @field(resolver: "UpdatePoster")
 
     ##category
     createCategory(input: CategoryInput! @spread): Category @create
     updateCategory(id: ID!, input: CategoryInput @spread): Category @update
     deleteCategory(id: ID!): Category @delete
 
-    ##photo
-    addPhoto(input: PhotoInput! @spread): Photo @create
-    updatePhoto(id: ID!, input: PhotoInput @spread): Photo @update
+    ##media
+    addMedia(input: MediaInput! @spread): Photo @create
+    updatePhoto(id: ID!, input: MediaInput @spread): Photo @update
     deletePhoto(id: ID!): Photo @delete
 
     ##favorite
@@ -73,18 +88,50 @@ type Mutation {
     updateFollower(id: ID!, input: FollowerInput @spread): Follower @update
     deleteFollower(id: ID!): Follower @delete
 
-    toggleLike(input: ToggleLikeInput!  @spread): ToggleLikeResponse @field(resolver: "ToggleLike")
+    toggleLike(input: ToggleLikeInput! @spread): ToggleLikeResponse @field(resolver: "ToggleLike")
 
-    toggleFollow(input: ToggleFollowInput!  @spread): ToggleFollowResponse @field(resolver: "ToggleFollow")
+    ##card
+    addCard(input: CardInput! @spread): CardResponse @field(resolver: "AddCard")
+    deleteCard(input: CardInput! @spread): CardResponse @field(resolver: "DeleteCard")
+    setDefaultCard(input: CardInput! @spread): CardResponse @field(resolver: "SetDefaultCard")
+    toggleFollow(input: ToggleFollowInput! @spread): ToggleFollowResponse @field(resolver: "ToggleFollow")
 
-    modelPlan(input: ModelPlanInput!  @spread): ModelPlanResponse @field(resolver: "ModelPlan")
-    addPrice(input: AddPriceInput!  @spread): AddPriceResponse @field(resolver: "AddPrice")
-
-    addCard(input: CardInput!  @spread): CardResponse @field(resolver: "AddCard")
-    deleteCard(input: CardInput!  @spread): CardResponse @field(resolver: "DeleteCard")
-    setDefaultCard(input: CardInput!  @spread): CardResponse @field(resolver: "SetDefaultCard")
+    modelPlan(input: ModelPlanInput! @spread): ModelPlanResponse @field(resolver: "ModelPlan")
+    addPrice(input: AddPriceInput! @spread): AddPriceResponse @field(resolver: "AddPrice")
 }
 
+extend type Mutation{
+    ##auth
+    login(input: LoginInput @spread): AuthPayload! @field(resolver: "Login")
+    register(input: RegisterInput @spread): RegisterResponse!
+        @field(resolver: "Register")
+    verifyUserEmail(
+        input: VerifyUserEmailInput! @spread
+    ): VerifyUserEmailResponse @field(resolver: "VerifyUserEmail")
+
+    resetPassword(input: ResetPasswordInput! @spread): ResetPasswordResponse @field(resolver: "ResetPassword")
+}
+
+type UploadUrl {
+    signedUrl: String!
+    filename: String!
+}
+
+input UploadUrlInput {
+    name: String!
+}
+
+input UpdateAvatarInput {
+    avatar: String!
+}
+
+input UpdatePosterInput {
+    poster: String!
+}
+
+type UpdatePhotoResponse {
+    success: String!
+}
 
 type User {
     id: ID!
@@ -135,6 +182,11 @@ type Modele {
     updated_at: DateTime!
 }
 
+type DeleteModeleResponse {
+    success: Boolean
+    user: User
+}
+
 type ModeleAccount {
     id: ID!
     modele_id: ID!
@@ -167,10 +219,10 @@ type Category {
 type Photo {
     id: ID!
     modele_id: Int!
-    category_id: Int!
+    category_id: Int
     uri: String!
     bucket: String!
-    caption: String!
+    caption: String
     detail: String
     featured: Boolean
     for_my_modele: Boolean
@@ -181,14 +233,12 @@ type Photo {
     is_for_me: Boolean
     likes_count: Int
     category: Category! @belongsTo
-    modele: Modele! @belongsTo
+    modele: Modele @belongsTo
     users: [User!]! @belongsToMany
-
 
     created_at: DateTime!
     updated_at: DateTime!
 }
-
 
 type Favorite {
     id: ID!
@@ -206,8 +256,17 @@ type PublishableKey {
 }
 
 type PaymentIntentResponse {
-    client_secret: String,
+    client_secret: String
 }
+
+type VerifyEmailResponse {
+    message: String,
+}
+
+type VerifyCodeResponse {
+    success: Boolean,
+}
+
 
 type ToggleLikeResponse {
     success: Boolean
@@ -247,7 +306,6 @@ type InvoceResponse {
     lines: String
 }
 
-
 type VerifyUserEmailResponse {
     exist: Boolean
 }
@@ -266,153 +324,6 @@ type ChangePasswordResponse {
     message: String
 }
 
-
-
-
-##input
-input CategoryInput {
-    name: String!
-}
-
-input ChangePasswordInput {
-    password: String!
-    new_password: String!
-}
-
-input ToggleLikeInput {
-    photo_id: String!
-}
-
-input CardInput {
-    card: String!
-}
-
-input ToggleFollowInput {
-    modele_id: String!
-    payment_method: String
-}
-
-input VerifyUserEmailInput {
-    email: String!
-}
-
-input CancelSubscriptionInput {
-    paymentMethod: String!
-}
-
-input PhotoInput {
-    modele_id: Int!
-    category_id: Int!
-    uri: String!
-    bucket: String!
-    type: String!
-    caption: String!
-    detail: String!
-    featured: Boolean
-    publish: Boolean
-}
-
-input FavoriteInput {
-    photo_id: Int!
-    user_id: Int!
-}
-
-input FollowerInput {
-    modele_id: Int!
-    user_id: Int!
-}
-
-input UpdateUserInput {
-    id: ID!
-    name: String 
-    email: String
-    gender: Genre 
-    first_login: Boolean
-    user_type: UserType 
-    telephone: String
-    avatar: String
-    modele: ModeleHasOne
-}
-
-input ModeleHasOne {
-    create: CreateModeleInput
-    update: UpdateModeleInput
-    upsert: UpsertModeleInput
-    delete: ID
-}
-
-input CreateModeleInput {
-    stage_name: String! 
-    bucket: String 
-    poster: String 
-    bio: String 
-    facebook: String 
-    instagram: String 
-    twitter: String 
-    youtube: String 
-}
-
-input UpdateModeleInput {
-    id: ID
-    stage_name: String
-    bucket: String 
-    poster: String 
-    bio: String 
-    facebook: String 
-    instagram: String 
-    twitter: String 
-    youtube: String 
-}
-
-input UpsertModeleInput {
-    id: ID
-    stage_name: String! 
-    bucket: String 
-    poster: String 
-    hash: String 
-    bio: String 
-    facebook: String 
-    instagram: String 
-    twitter: String 
-    youtube: String 
-}
-
-input ModelPlanInput {
-    user_id: Int!
-    name: String!
-    cost: Int!
-}
-
-input AddPriceInput {
-    user_id: String!
-    cost: Int!
-}
-
-
-input OrderByClause {
-	field: String!
-	order: SortOrder!
-}
-
-
-
-enum SortOrder {
-	ASC
-	DESC
-}
-
-input LoginInput {
-    username: String!
-    password: String!
-}
-
-input RefreshTokenInput {
-    refresh_token: String
-}
-
-input PaymentIntentInput {
-    hash: String!
-}
 
 type GetModelPriceStripeIdResponse {
     price_id: String
@@ -454,19 +365,197 @@ type UpdatePasswordResponse {
     message: String
 }
 
+type ResetPasswordResponse {
+    message: String
+    success: Boolean
+}
+
+
+
+
+##input
+input CodeVerificationInput {
+    code: String
+    email: String
+}
+
+input ResetPasswordInput {
+    email: String
+    password: String
+}
+
+input CategoryInput {
+    name: String!
+}
+
+input ChangePasswordInput {
+    password: String!
+    new_password: String!
+}
+
+input ToggleLikeInput {
+    photo_id: String!
+}
+
+input CardInput {
+    card: String!
+}
+
+input ToggleFollowInput {
+    modele_id: String!
+    payment_method: String
+}
+
+input VerifyUserEmailInput {
+    email: String!
+}
+
+input CancelSubscriptionInput {
+    paymentMethod: String!
+}
+
+input MediaInput {
+    modele_id: Int!
+    category_id: Int
+    uri: String!
+    bucket: String!
+    type: String!
+    caption: String
+    featured: Boolean
+    publish: Boolean
+}
+
+input FavoriteInput {
+    photo_id: Int!
+    user_id: Int!
+}
+
+input FollowerInput {
+    modele_id: Int!
+    user_id: Int!
+}
+
+input UpdateUserInput {
+    id: ID!
+    name: String
+    email: String
+    gender: Genre
+    first_login: Boolean
+    user_type: UserType
+    telephone: String
+    avatar: String
+}
+
+input UpdateUserWithModelInput {
+    id: ID!
+    name: String 
+    email: String
+    gender: Genre 
+    first_login: Boolean
+    user_type: UserType 
+    telephone: String
+    avatar: String
+    modele: ModeleHasOne
+}
+
+input ModeleHasOne {
+    create: CreateModeleInput
+    update: UpdateModeleInput
+    upsert: UpsertModeleInput
+    delete: ID
+}
+
+input CreateModeleInput {
+    stage_name: String!
+    bucket: String
+    poster: String
+    bio: String
+    facebook: String
+    instagram: String
+    twitter: String
+    youtube: String
+}
+
+input UpdateModeleInput {
+    id: ID
+    stage_name: String
+    bucket: String
+    poster: String
+    bio: String
+    facebook: String
+    instagram: String
+    twitter: String
+    youtube: String
+}
+
+input UpsertModeleInput {
+    id: ID
+    stage_name: String!
+    bucket: String
+    poster: String
+    hash: String
+    bio: String
+    facebook: String
+    instagram: String
+    twitter: String
+    youtube: String
+}
+
+input ModelPlanInput {
+    user_id: Int!
+    name: String!
+    cost: Int!
+}
+
+input AddPriceInput {
+    user_id: String!
+    cost: Int!
+}
+
+input OrderByClause {
+    field: String!
+    order: SortOrder!
+}
+
+input DeleteModelInput{
+    id: String
+}
+
+input DeleteUserInput{
+    id: String
+}
+
+enum SortOrder {
+    ASC
+    DESC
+}
+
+input LoginInput {
+    username: String!
+    password: String!
+}
+
+input RefreshTokenInput {
+    refresh_token: String
+}
+
+input PaymentIntentInput {
+    hash: String!
+}
+
 enum RegisterStatuses {
     MUST_VERIFY_EMAIL
     SUCCESS
 }
 
 enum UserType {
-	MODEL
-	CONSUMER
+    MODEL
+    CONSUMER
 }
 
 enum Genre {
-	MALE
-	FEMALE
+    MALE
+    FEMALE
     OTHER
 }
 
@@ -492,15 +581,15 @@ input RegisterInput {
 }
 
 input CreateModeleInput {
-    stage_name: String! 
-    bucket: String 
-    poster: String 
-    has: Int 
-    bio: String 
-    facebook: String 
-    instagram: String 
-    twitter: String 
-    youtube: String 
+    stage_name: String!
+    bucket: String
+    poster: String
+    has: Int
+    bio: String
+    facebook: String
+    instagram: String
+    twitter: String
+    youtube: String
 }
 
 input SocialLoginInput {

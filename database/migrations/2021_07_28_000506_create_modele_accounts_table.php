@@ -21,7 +21,7 @@ class CreateModeleAccountsTable extends Migration
             $table->bigInteger('balance');
             $table->timestamps();
 
-            $table->foreign('modele_id')->references('id')->on('modeles');
+            $table->foreign('modele_id')->references('id')->on('modeles')->onDelete('cascade');
         });
     }
 

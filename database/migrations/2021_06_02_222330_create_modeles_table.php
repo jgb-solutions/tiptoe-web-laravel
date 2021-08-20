@@ -28,8 +28,9 @@ class CreateModelesTable extends Migration
             $table->string('youtube')->nullable();
             $table->boolean('verified')->default(false);
             $table->timestamps();
+            $table->softDeletes();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

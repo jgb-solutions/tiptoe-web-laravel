@@ -17,18 +17,18 @@ class CreatePhotosTable extends Migration
             $table->engine = ' MyISAM';
             $table->id();
             $table->bigInteger('modele_id');
-            $table->bigInteger('category_id');
+            $table->bigInteger('category_id')->nullable();
             $table->string('uri');
             $table->string('bucket');
             $table->string('type');
-            $table->string('caption');
+            $table->string('caption')->nullable();
             $table->text('detail')->nullable();
             $table->boolean('featured')->nullable();
             $table->string('hash');
             $table->boolean('publish')->default(false);
             $table->timestamps();
 
-            $table->foreign('modele_id')->references('id')->on('modeles');
+            $table->foreign('modele_id')->references('id')->on('modeles')->onDelete('cascade');
         });
     }
 

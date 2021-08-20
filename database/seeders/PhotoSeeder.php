@@ -188,5 +188,21 @@ class PhotoSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+
+        \DB::table('photos')->insert([
+            "modele_id"   =>  "3",
+            'category_id' => "1",
+            'type'        => "photo",
+            'uri'         => "https://canary.contestimg.wish.com/api/webimage/599be68091c5c95f98c35f4f-large.jpg?cache_buster=6fd4378436916481ef6521d26414a227",
+            'bucket'      => "tiptoe.dev",
+            'caption'     => "Top model",
+            'hash'       => '795fb9s7-780f-54j6-ay48-06d337tb8f7g',
+            'detail'      => "This is an example",
+            'featured'    => true ,
+            'publish'     => true ,
+            
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 }

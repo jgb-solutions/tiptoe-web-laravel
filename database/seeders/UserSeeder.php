@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             "admin" =>  true,
             "telephone" =>  "41830318",
             "user_type" =>  "CONSUMER",
-            "gender" =>  "male",
+            "gender" =>  "MALE",
             
             'created_at' => now(),
             'updated_at' => now()
@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
             "admin" =>  true,
             "telephone" =>  "+19415650253",
             "user_type" =>  "CONSUMER",
-            "gender" =>  "male",
+            "gender" =>  "MALE",
             
             'created_at' => now(),
             'updated_at' => now()
@@ -47,11 +47,11 @@ class UserSeeder extends Seeder
             "email" => "poliarddjimmy@gmail.com",
             "email_verified_at" => now(),
             "password" => Hash::make('password'),
-            "avatar" => "https://scontent.fhex4-1.fna.fbcdn.net/v/t1.6435-9/67911518_2620692784648944_4849506694138429440_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeGQKHC3cAGmt6k2uIDmMKb-JIAyxHlhzsQkgDLEeWHOxL9CgesW_pcBO7SChkMAayzb46bTtLeIYan6as3eQOvC&_nc_ohc=bcVgCtrpYSAAX8YRTgF&_nc_ht=scontent.fhex4-1.fna&oh=fc6df41de81dd2de21d4d1eff6e9dfa4&oe=60D829FE",
+            "avatar" => "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
             "admin" =>  false,
             "telephone" =>  "+18492107910",
             "user_type" =>  "CONSUMER",
-            "gender" =>  "male",
+            "gender" =>  "MALE",
             
             'created_at' => now(),
             'updated_at' => now()
@@ -66,7 +66,7 @@ class UserSeeder extends Seeder
             "admin" =>  false,
             "telephone" =>  "+18496157915",
             "user_type" =>  "MODEL",
-            "gender" =>  "female",
+            "gender" =>  "FEMALE",
             
             'created_at' => now(),
             'updated_at' => now()
@@ -81,7 +81,22 @@ class UserSeeder extends Seeder
             "admin" =>  false,
             "telephone" =>  "+18429157618",
             "user_type" =>  "MODEL",
-            "gender" =>  "female",
+            "gender" =>  "FEMALE",
+            
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        \DB::table('users')->insert([
+            "name" =>  "Test User",
+            "email" => "test@test.app",
+            "email_verified_at" => now(),
+            "password" => Hash::make('password'),
+            "avatar" => "https://www.face-agency.co.uk/images/uploads/models/large/1548678753-21.jpg",
+            "admin" =>  false,
+            "telephone" =>  "+18429157618",
+            "user_type" =>  "MODEL",
+            "gender" =>  "FEMALE",
             
             'created_at' => now(),
             'updated_at' => now()

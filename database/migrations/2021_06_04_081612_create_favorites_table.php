@@ -20,7 +20,7 @@ class CreateFavoritesTable extends Migration
             $table->bigInteger('user_id');
             $table->timestamps();
 
-            $table->foreign('user_id', 'photo_id')->references('id')->on('users', 'photos');
+            $table->foreign('user_id', 'photo_id')->references('id')->on('users', 'photos')->onDelete('cascade');
         });
     }
 

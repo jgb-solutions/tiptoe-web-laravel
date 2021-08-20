@@ -15,10 +15,12 @@ class AddCard
         $success = false;
 
         $user = auth()->user();
+        $user->createOrGetStripeCustomer();
         
-        \DB::beginTransaction();
+        \DB::beginTransaction(); 
         try{
             $success = !!$user->addPaymentMethod($card);
+            $user->updateDefaultPaymentMethodFromStripe();
         }catch(\Exception $e){
             \DB::rollback();
             \Log::info('We cannot add your card at this time. Try agian', ['error' => $e] );
